@@ -7,6 +7,7 @@ import ru.practicum.dto.mapper.ViewStatsMapper;
 import ru.practicum.ewm.stats.dto.EndpointHitDto;
 import ru.practicum.ewm.stats.dto.ViewStatsDto;
 import ru.practicum.model.EndpointHit;
+import ru.practicum.model.ViewStatsRequest;
 import ru.practicum.repository.StatsRepository;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class StatsServiceBase implements StatsService {
     }
 
     @Override
-    public List<ViewStatsDto> getStats(String start, String end, List<String> uris, boolean unique) {
+    public List<ViewStatsDto> getStats(ViewStatsRequest viewStatsRequest) {
         return List.of();
     }
 }
