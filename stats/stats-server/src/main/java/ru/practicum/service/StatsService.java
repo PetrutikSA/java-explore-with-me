@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StatsService {
 
-    void createRecord(EndpointHitDto endpointHitDto);
+    EndpointHitDto createRecord(EndpointHitDto endpointHitDto);
 
     List<ViewStatsDto> getStats (String start, String end, List<String> uris, boolean unique);
 }
