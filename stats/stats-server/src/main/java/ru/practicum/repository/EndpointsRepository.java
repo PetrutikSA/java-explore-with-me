@@ -1,17 +1,12 @@
 package ru.practicum.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.model.EndpointHit;
-import ru.practicum.model.ViewStats;
-
-import java.time.Instant;
-import java.util.List;
 
 @Repository
-public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
-    @Query(value = """
+public interface EndpointsRepository extends JpaRepository<EndpointHit, Long> {
+/*    @Query(value = """
         SELECT new ru.practicum.model.ViewStats(eh.app, eh.uri, COUNT (eh.id))
         FROM EndpointHit eh
         WHERE eh.timestamp >= ?1 AND eh.timestamp <= ?2
@@ -45,5 +40,5 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
         GROUP BY eh.app, eh.uri
     """
     )
-    List<ViewStats> findViewStatsForSpecifiedUriDistinctIpsBetweenDates(Instant start, Instant end, List<String> uris);
+    List<ViewStats> findViewStatsForSpecifiedUriDistinctIpsBetweenDates(Instant start, Instant end, List<String> uris);*/
 }
