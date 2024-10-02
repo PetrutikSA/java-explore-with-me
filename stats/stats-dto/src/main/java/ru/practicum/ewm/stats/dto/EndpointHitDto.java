@@ -9,5 +9,5 @@ public class EndpointHitDto {
     private String app;
     private String uri;
     private String ip;
-    private Instant timestamp;
+    private String timestamp;
 }

@@ -28,5 +28,6 @@ public class EndpointHit {
     private String uri;
     @Column(name = "name", table = "ips")
     private String ip;
+    @Column(name = "created")
     private Instant timestamp;
 }
