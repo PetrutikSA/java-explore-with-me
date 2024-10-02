@@ -16,7 +16,6 @@ import ru.practicum.repository.UrisRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,20 +62,20 @@ public class StatsServiceBase implements StatsService {
                 Instant::from);
         Instant end = DATE_TIME_FORMATTER.parse(java.net.URLDecoder.decode(endString, StandardCharsets.UTF_8),
                 Instant::from);
-        List<ViewStats> viewStatsList = new ArrayList<>();/*
+        List<ViewStats> viewStatsList;
         if (uris == null || uris.isEmpty()) {
             if (unique) {
-                viewStatsList = statsRepository.findViewStatsForAllUriDistinctIpsBetweenDates(start, end);
+                viewStatsList = endpointsRepository.findViewStatsForAllUriDistinctIpsBetweenDates(start, end);
             } else {
-                viewStatsList = statsRepository.findViewStatsForAllUriAllIpsBetweenDates(start, end);
+                viewStatsList = endpointsRepository.findViewStatsForAllUriAllIpsBetweenDates(start, end);
             }
         } else {
             if (unique) {
-                viewStatsList = statsRepository.findViewStatsForSpecifiedUriDistinctIpsBetweenDates(start, end, uris);
+                viewStatsList = endpointsRepository.findViewStatsForSpecifiedUriDistinctIpsBetweenDates(start, end, uris);
             } else {
-                viewStatsList = statsRepository.findViewStatsForSpecifiedUriAllIpsBetweenDates(start, end, uris);
+                viewStatsList = endpointsRepository.findViewStatsForSpecifiedUriAllIpsBetweenDates(start, end, uris);
             }
-        }*/
+        }
 
         return viewStatsList.stream()
                 .map(viewStatsMapper::viewStatsToViewStatsDto)
