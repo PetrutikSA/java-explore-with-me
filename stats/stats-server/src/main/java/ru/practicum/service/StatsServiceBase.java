@@ -16,6 +16,7 @@ import ru.practicum.repository.UrisRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,6 +80,7 @@ public class StatsServiceBase implements StatsService {
 
         return viewStatsList.stream()
                 .map(viewStatsMapper::viewStatsToViewStatsDto)
+                .sorted(Comparator.comparing(ViewStatsDto::getHits).reversed())
                 .toList();
     }
 }
