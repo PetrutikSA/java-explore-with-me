@@ -8,12 +8,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ru.practicum.dto.mapper.EndpointHitMapper;
 import ru.practicum.dto.mapper.EndpointHitMapperImpl;
-import ru.practicum.dto.mapper.ViewStatsMapper;
 import ru.practicum.dto.mapper.ViewStatsMapperImpl;
 import ru.practicum.ewm.stats.dto.EndpointHitDto;
-import ru.practicum.ewm.stats.dto.ViewStatsDto;
 import ru.practicum.model.EndpointHit;
 import ru.practicum.repository.AppsRepository;
 import ru.practicum.repository.EndpointsRepository;
@@ -35,21 +32,13 @@ public class StatsServiceTests {
     private final StatsService statsService;
 
     private EndpointHitDto endpointHitDto;
-    private EndpointHitDto endpointHitDtoSecondEvent;
     private EndpointHit endpointHit;
-    private EndpointHit endpointHitSecond;
-    private ViewStatsDto viewStatsDtoAll;
-    private ViewStatsDto viewStatsDtoUnique;
 
     @BeforeEach
     void beforeEach() {
         TestObjects testObjects = new TestObjects();
         endpointHitDto = testObjects.endpointHitDto;
-        endpointHitDtoSecondEvent = testObjects.endpointHitDtoSecondEvent;
         endpointHit = testObjects.endpointHit;
-        endpointHitSecond = testObjects.endpointHitSecond;
-        viewStatsDtoAll = testObjects.viewStatsDtoAll;
-        viewStatsDtoUnique = testObjects.viewStatsDtoUnique;
     }
 
     @Test
