@@ -19,6 +19,7 @@ public interface EndpointHitMapper {
     @Mapping(target = "app", expression = "java(new App(endpointHitDto.getApp()))")
     @Mapping(target = "uri", expression = "java(new Uri(endpointHitDto.getUri()))")
     EndpointHit endpointHitDtoToEndpointHit(EndpointHitDto endpointHitDto);
+
     @Mapping(target = "timestamp", expression = "java(ru.practicum.ewm.stats.util.Constants.DATE_TIME_FORMATTER" +
             ".format(endpointHit.getTimestamp()))")
     @Mapping(target = "app", expression = "java(endpointHit.getApp().getName())")

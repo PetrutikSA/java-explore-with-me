@@ -16,8 +16,8 @@ public class StatsClient {
 
     private final RestClient restClient;
 
-    public StatsClient() {
-        this.restClient = RestClient.builder()
+    public StatsClient(RestClient.Builder builder) {
+        this.restClient = builder
                 .baseUrl("http://localhost:9090")
                 .build();
     }
