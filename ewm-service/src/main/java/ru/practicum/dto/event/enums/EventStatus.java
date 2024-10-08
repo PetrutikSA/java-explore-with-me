@@ -1,4 +1,4 @@
-package ru.practicum.dto.events.enums;
+package ru.practicum.dto.event.enums;
 
 public enum EventStatus {
     CONFIRMED,

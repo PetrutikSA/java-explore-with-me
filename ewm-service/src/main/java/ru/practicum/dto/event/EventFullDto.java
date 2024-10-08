@@ -1,9 +1,9 @@
-package ru.practicum.dto.events;
+package ru.practicum.dto.event;
 
 import lombok.Data;
-import ru.practicum.dto.categories.CategoryDto;
-import ru.practicum.dto.locations.LocationDto;
-import ru.practicum.dto.users.UserShortDto;
+import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.location.LocationDto;
+import ru.practicum.dto.user.UserShortDto;
 
 @Data
 public class EventFullDto {

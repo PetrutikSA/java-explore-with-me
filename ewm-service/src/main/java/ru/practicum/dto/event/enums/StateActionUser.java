@@ -1,4 +1,4 @@
-package ru.practicum.dto.events.enums;
+package ru.practicum.dto.event.enums;
 
 public enum StateActionUser {
     SEND_TO_REVIEW,

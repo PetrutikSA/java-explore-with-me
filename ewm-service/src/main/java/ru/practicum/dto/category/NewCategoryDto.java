@@ -1,4 +1,4 @@
-package ru.practicum.dto.categories;
+package ru.practicum.dto.category;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

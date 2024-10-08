@@ -1,8 +1,8 @@
-package ru.practicum.dto.events.requests;
+package ru.practicum.dto.event.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import ru.practicum.dto.events.enums.EventStatus;
+import ru.practicum.dto.event.enums.EventStatus;
 import ru.practicum.dto.validation.enums.EnumValidator;
 
 import java.util.List;
