@@ -1,5 +1,6 @@
 package ru.practicum.event.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
@@ -8,11 +9,15 @@ import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.dto.event.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.event.request.ParticipationRequestDto;
+import ru.practicum.event.repository.EventRepository;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EventPrivateServiceBase implements EventPrivateService {
+    private final EventRepository eventRepository;
+
     @Override
     public EventFullDto createNewEvent(Long userId, NewEventDto newEventDto) {
         return null;
