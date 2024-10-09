@@ -1,5 +1,6 @@
 package ru.practicum.event.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -11,12 +12,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
+import ru.practicum.event.service.EventAdminService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin/events")
+@RequiredArgsConstructor
 public class EventAdminController {
+    private final EventAdminService eventAdminService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -29,7 +33,8 @@ public class EventAdminController {
             @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
             @RequestParam(name = "size", required = false, defaultValue = "10") Integer size
     ) {
-        return null;
+        return eventAdminService.getAllEventsWithFilter(
+                usersIds, states, categoriesIds, rangeStartString, rangeEndString, from, size);
     }
 
     @PatchMapping("/{eventId}")
@@ -37,6 +42,6 @@ public class EventAdminController {
     public EventFullDto updateEventByUser(@PathVariable Long userId,
                                           @PathVariable Long eventId,
                                           @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
-        return null;
+        return eventAdminService.updateEventByUser(userId, eventId, updateEventAdminRequest);
     }
 }
