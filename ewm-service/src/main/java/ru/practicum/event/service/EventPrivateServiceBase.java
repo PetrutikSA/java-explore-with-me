@@ -10,6 +10,7 @@ import ru.practicum.dto.event.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.event.request.ParticipationRequestDto;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.request.repository.RequestRepository;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventPrivateServiceBase implements EventPrivateService {
     private final EventRepository eventRepository;
+    private final RequestRepository repository;
 
     @Override
     public EventFullDto createNewEvent(Long userId, NewEventDto newEventDto) {
@@ -44,7 +46,8 @@ public class EventPrivateServiceBase implements EventPrivateService {
     }
 
     @Override
-    public EventRequestStatusUpdateResult responseOnParticipationRequests(Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+    public EventRequestStatusUpdateResult responseOnParticipationRequests(
+            Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         return null;
     }
 }
