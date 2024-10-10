@@ -1,6 +1,5 @@
 package ru.practicum.category.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.category.TestObjectsCategory;
 import ru.practicum.category.service.CategoryPublicService;
 import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.dto.category.NewCategoryDto;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;

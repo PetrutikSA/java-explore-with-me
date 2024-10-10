@@ -154,12 +154,4 @@ class EventPrivateControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.toString())));
     }
-
-    @Test
-    void getParticipationRequestsOnEvent() throws Exception  {
-    }
-
-    @Test
-    void responseOnParticipationRequests() throws Exception  {
-    }
 }
