@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.Instant;
 import java.util.List;
 
+import static ru.practicum.config.EWMServiceAppConfig.DATE_TIME_FORMATTER;
+
 @RestControllerAdvice
 public class ErrorHandler {
 
@@ -25,7 +27,7 @@ public class ErrorHandler {
                 .message(methodArgumentNotValidException.getBody().getDetail())
                 .reason(fieldErrors.getFirst().getDefaultMessage())
                 .status(HttpStatus.BAD_REQUEST.toString())
-                .timestamp(Instant.now().toString())
+                .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
                 .build();
     }
 
@@ -37,7 +39,7 @@ public class ErrorHandler {
                 .message("Invalid method parameter")
                 .reason(constraintViolationException.getLocalizedMessage())
                 .status(HttpStatus.BAD_REQUEST.toString())
-                .timestamp(Instant.now().toString())
+                .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
                 .build();
     }
 }
