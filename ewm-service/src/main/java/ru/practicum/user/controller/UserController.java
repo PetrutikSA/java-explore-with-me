@@ -1,6 +1,8 @@
 package ru.practicum.user.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,28 +22,28 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/users")
-@Valid
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody NewUserRequest newUserRequest) {
+    public UserDto createUser(@RequestBody @Valid NewUserRequest newUserRequest) {
         return userService.createUser(newUserRequest);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getUsers(@RequestParam(name = "ids", required = false) List<Long> ids,
-                                   @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-                                   @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+    public List<UserDto> getUsers(
+            @RequestParam(name = "ids", required = false) List<@Positive Long> ids,
+            @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size) {
         return userService.getUsers(ids, from, size);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable @Positive Long userId) {
         userService.deleteUser(userId);
     }
 }
