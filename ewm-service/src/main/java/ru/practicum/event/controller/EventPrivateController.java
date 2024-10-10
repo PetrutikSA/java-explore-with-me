@@ -1,7 +1,11 @@
 package ru.practicum.event.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,52 +29,53 @@ import java.util.List;
 @RestController
 @RequestMapping("/users/{userId}/events")
 @RequiredArgsConstructor
+@Validated
 public class EventPrivateController {
     private final EventPrivateService eventPrivateService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto createNewEvent(@PathVariable Long userId,
-                                       @RequestBody NewEventDto newEventDto) {
+    public EventFullDto createNewEvent(@PathVariable @Positive Long userId,
+                                       @RequestBody @Valid NewEventDto newEventDto) {
         return eventPrivateService.createNewEvent(userId, newEventDto);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getAllUserEvents(
-            @PathVariable Long userId,
-            @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+            @PathVariable @Positive Long userId,
+            @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size) {
         return eventPrivateService.getAllUserEvents(userId, from, size);
     }
 
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventById(@PathVariable Long userId, @PathVariable Long eventId) {
+    public EventFullDto getEventById(@PathVariable @Positive Long userId, @PathVariable @Positive Long eventId) {
         return eventPrivateService.getEventById(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto updateEventByUser(@PathVariable Long userId,
-                                          @PathVariable Long eventId,
-                                          @RequestBody UpdateEventUserRequest updateEventUserRequest) {
+    public EventFullDto updateEventByUser(@PathVariable @Positive Long userId,
+                                          @PathVariable @Positive Long eventId,
+                                          @RequestBody  @Valid UpdateEventUserRequest updateEventUserRequest) {
         return eventPrivateService.updateEventByUser(userId, eventId, updateEventUserRequest);
     }
 
     @GetMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getParticipationRequestsOnEvent(@PathVariable Long userId,
-                                                                         @PathVariable Long eventId) {
+    public List<ParticipationRequestDto> getParticipationRequestsOnEvent(@PathVariable @Positive Long userId,
+                                                                         @PathVariable @Positive Long eventId) {
         return eventPrivateService.getParticipationRequestsOnEvent(userId, eventId);
     }
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
     public EventRequestStatusUpdateResult responseOnParticipationRequests(
-            @PathVariable Long userId,
-            @PathVariable Long eventId,
-            @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+            @PathVariable @Positive Long userId,
+            @PathVariable @Positive Long eventId,
+            @RequestBody  @Valid EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         return eventPrivateService.responseOnParticipationRequests(userId, eventId, eventRequestStatusUpdateRequest);
     }
 }

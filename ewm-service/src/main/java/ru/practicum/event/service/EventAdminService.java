@@ -6,14 +6,14 @@ import ru.practicum.dto.event.UpdateEventAdminRequest;
 import java.util.List;
 
 public interface EventAdminService {
-    List<EventFullDto> getAllEventsWithFilter(List<Integer> usersIds,
+    List<EventFullDto> getAllEventsWithFilter(List<Long> usersIds,
                                               List<String> states,
-                                              List<Integer> categoriesIds,
+                                              List<Long> categoriesIds,
                                               String rangeStartString,
                                               String rangeEndString,
                                               Integer from,
                                               Integer size
     );
 
-    EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
+    EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
 }

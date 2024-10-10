@@ -14,12 +14,18 @@ public class EventAdminServiceBase implements EventAdminService {
     private final EventRepository eventRepository;
 
     @Override
-    public List<EventFullDto> getAllEventsWithFilter(List<Integer> usersIds, List<String> states, List<Integer> categoriesIds, String rangeStartString, String rangeEndString, Integer from, Integer size) {
+    public List<EventFullDto> getAllEventsWithFilter(List<Long> usersIds,
+                                                     List<String> states,
+                                                     List<Long> categoriesIds,
+                                                     String rangeStartString,
+                                                     String rangeEndString,
+                                                     Integer from,
+                                                     Integer size) {
         return List.of();
     }
 
     @Override
-    public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
+    public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         return null;
     }
 }
