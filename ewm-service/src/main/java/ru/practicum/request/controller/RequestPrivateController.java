@@ -1,7 +1,9 @@
 package ru.practicum.request.controller;
 
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,26 +20,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/users/{userId}/requests")
 @RequiredArgsConstructor
+@Validated
 public class RequestPrivateController {
     private final RequestPrivateService requestPrivateService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationRequestDto createParticipationRequest(@PathVariable Long userId,
-                                                              @RequestParam Long eventId) {
+    public ParticipationRequestDto createParticipationRequest(@PathVariable @Positive Long userId,
+                                                              @RequestParam @Positive Long eventId) {
         return requestPrivateService.createParticipationRequest(userId, eventId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getAllOwnParticipationRequests(@PathVariable Long userId) {
+    public List<ParticipationRequestDto> getAllOwnParticipationRequests(@PathVariable @Positive Long userId) {
         return requestPrivateService.getAllOwnParticipationRequests(userId);
     }
 
     @PatchMapping("/{requestId}/cancel")
     @ResponseStatus(HttpStatus.OK)
-    public ParticipationRequestDto cancelOwnParticipationInEvent(@PathVariable Long userId,
-                                                                 @PathVariable Long requestId) {
+    public ParticipationRequestDto cancelOwnParticipationInEvent(@PathVariable @Positive Long userId,
+                                                                 @PathVariable @Positive Long requestId) {
         return requestPrivateService.cancelOwnParticipationInEvent(userId, requestId);
     }
 }

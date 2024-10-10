@@ -1,7 +1,10 @@
 package ru.practicum.compilation.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,25 +21,26 @@ import ru.practicum.dto.compilation.UpdateCompilationRequest;
 @RestController
 @RequestMapping("/admin/compilations")
 @RequiredArgsConstructor
+@Validated
 public class CompilationAdminController {
     private final CompilationAdminService compilationAdminService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto createCompilation(@RequestBody NewCompilationDto newCompilationDto) {
+    public CompilationDto createCompilation(@RequestBody @Valid NewCompilationDto newCompilationDto) {
         return compilationAdminService.createCompilation(newCompilationDto);
     }
 
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
-    public CompilationDto updateCompilation(@PathVariable Long compId,
-                                            @RequestBody UpdateCompilationRequest updateCompilationRequest) {
+    public CompilationDto updateCompilation(@PathVariable @Positive Long compId,
+                                            @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest) {
         return compilationAdminService.updateCompilation(compId, updateCompilationRequest);
     }
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilation(@PathVariable Long compId) {
+    public void deleteCompilation(@PathVariable @Positive Long compId) {
         compilationAdminService.deleteCompilation(compId);
     }
 }
