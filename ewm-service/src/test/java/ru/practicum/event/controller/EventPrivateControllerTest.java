@@ -47,7 +47,7 @@ class EventPrivateControllerTest {
     @BeforeEach
     void setUp() {
         TestObjectsCategory testObjectsCategory = new TestObjectsCategory();
-        TestObjectsEvent testObjectsEvent= new TestObjectsEvent(testObjectsCategory);
+        TestObjectsEvent testObjectsEvent = new TestObjectsEvent(testObjectsCategory);
 
         newEventDto = testObjectsEvent.newEventDto;
         eventFullDto = testObjectsEvent.eventFullDto;
@@ -127,7 +127,7 @@ class EventPrivateControllerTest {
     }
 
     @Test
-    void updateCorrectEventByUser() throws Exception  {
+    void updateCorrectEventByUser() throws Exception {
         Mockito.when(eventPrivateService.updateEventByUser(Mockito.anyLong(), Mockito.anyLong(), Mockito.any()))
                 .thenReturn(eventFullDto);
 
@@ -143,7 +143,7 @@ class EventPrivateControllerTest {
     }
 
     @Test
-    void updateWrongStateEventByUserGetBadRequest() throws Exception  {
+    void updateWrongStateEventByUserGetBadRequest() throws Exception {
         updateEventUserRequest.setStateAction("Wrong");
 
         mvc.perform(patch("/users/{userId}/events/{eventId}", 1L, 1L)

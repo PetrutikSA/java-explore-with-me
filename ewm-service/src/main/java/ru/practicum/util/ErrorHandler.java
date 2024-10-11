@@ -1,6 +1,7 @@
 package ru.practicum.util;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.util.exception.NotFoundException;
 
 import java.time.Instant;
 import java.util.List;
@@ -39,6 +41,30 @@ public class ErrorHandler {
                 .message("Invalid method parameter")
                 .reason(constraintViolationException.getLocalizedMessage())
                 .status(HttpStatus.BAD_REQUEST.toString())
+                .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
+                .build();
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleDataIntegrityViolation(DataIntegrityViolationException dataIntegrityViolationException) {
+        return ApiError.builder()
+                .errors(List.of(dataIntegrityViolationException.getStackTrace()))
+                .message(dataIntegrityViolationException.getLocalizedMessage())
+                .reason("Integrity constraint has been violated")
+                .status(HttpStatus.CONFLICT.toString())
+                .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
+                .build();
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleNotFoundException(NotFoundException notFoundException) {
+        return ApiError.builder()
+                .errors(List.of(notFoundException.getStackTrace()))
+                .message(notFoundException.getMessage())
+                .reason("The required object was not found.")
+                .status(HttpStatus.NOT_FOUND.toString())
                 .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
                 .build();
     }

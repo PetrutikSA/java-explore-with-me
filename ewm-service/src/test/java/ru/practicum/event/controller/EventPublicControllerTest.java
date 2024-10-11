@@ -39,7 +39,7 @@ class EventPublicControllerTest {
     @BeforeEach
     void setUp() {
         TestObjectsCategory testObjectsCategory = new TestObjectsCategory();
-        TestObjectsEvent testObjectsEvent= new TestObjectsEvent(testObjectsCategory);
+        TestObjectsEvent testObjectsEvent = new TestObjectsEvent(testObjectsCategory);
 
         eventFullDto = testObjectsEvent.eventFullDto;
         eventShortDto = testObjectsEvent.eventShortDto;
@@ -72,7 +72,7 @@ class EventPublicControllerTest {
     }
 
     @Test
-    void getEventByIdCorrect() throws Exception  {
+    void getEventByIdCorrect() throws Exception {
         Long eventId = 1L;
 
         Mockito.when(eventPublicService.getEventById(Mockito.anyLong()))

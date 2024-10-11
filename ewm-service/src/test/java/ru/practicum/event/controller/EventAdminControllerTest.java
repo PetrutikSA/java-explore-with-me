@@ -42,14 +42,14 @@ class EventAdminControllerTest {
     @BeforeEach
     void setUp() {
         TestObjectsCategory testObjectsCategory = new TestObjectsCategory();
-        TestObjectsEvent testObjectsEvent= new TestObjectsEvent(testObjectsCategory);
+        TestObjectsEvent testObjectsEvent = new TestObjectsEvent(testObjectsCategory);
 
         eventFullDto = testObjectsEvent.eventFullDto;
         updateEventAdminRequest = testObjectsEvent.updateEventAdminRequest;
     }
 
     @Test
-    void getAllEventsWithoutAnyFilterCorrect() throws Exception{
+    void getAllEventsWithoutAnyFilterCorrect() throws Exception {
         Mockito.when(eventAdminService.getAllEventsWithFilter(eq(null), eq(null), eq(null),
                         eq(null), eq(null), Mockito.anyInt(), Mockito.anyInt()))
                 .thenReturn(List.of(eventFullDto));
@@ -64,7 +64,7 @@ class EventAdminControllerTest {
     }
 
     @Test
-    void getAllEventsWithWrongUserIdsGetBadRequest() throws Exception{
+    void getAllEventsWithWrongUserIdsGetBadRequest() throws Exception {
         String userIds = "1,-1";
 
         mvc.perform(get("/admin/events?users={userIds}", userIds)
