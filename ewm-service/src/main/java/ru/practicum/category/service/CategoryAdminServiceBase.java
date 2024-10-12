@@ -4,25 +4,40 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.category.CategoryMapper;
 import ru.practicum.dto.category.NewCategoryDto;
+import ru.practicum.model.Category;
+import ru.practicum.util.exception.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryAdminServiceBase implements CategoryAdminService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
-        return null;
+        Category category = categoryMapper.newCategoryToCategory(newCategoryDto);
+        category = categoryRepository.save(category);
+        return categoryMapper.categoryToCategoryDto(category);
     }
 
     @Override
     public CategoryDto updateCategory(Long categoryId, NewCategoryDto newCategoryDto) {
-        return null;
+        Category category = findCategoryByIdOfThrowNotFoundException(categoryId);
+        categoryMapper.updateCategoryFromNewCategory(newCategoryDto, category);
+        category = categoryRepository.save(category);
+        return categoryMapper.categoryToCategoryDto(category);
     }
 
     @Override
     public void deleteCategory(Long categoryId) {
+        Category category = findCategoryByIdOfThrowNotFoundException(categoryId);
+        categoryRepository.deleteById(categoryId);
+    }
 
+    private Category findCategoryByIdOfThrowNotFoundException(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException(categoryId, Category.class));
     }
 }
