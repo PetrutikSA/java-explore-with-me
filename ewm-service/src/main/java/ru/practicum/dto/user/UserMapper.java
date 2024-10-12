@@ -11,4 +11,6 @@ public interface UserMapper {
     User newUserRequestToUser(NewUserRequest newUserRequest);
 
     UserDto userToUserDto(User user);
+
+    UserShortDto userToUserShortDto(User user);
 }
