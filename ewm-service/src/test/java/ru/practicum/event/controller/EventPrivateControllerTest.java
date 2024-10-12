@@ -87,7 +87,7 @@ class EventPrivateControllerTest {
 
     @Test
     void createNegativeCategoryIdNewEventGetBadRequest() throws Exception {
-        newEventDto.setCategoryId(-1);
+        newEventDto.setCategory(-1);
 
         mvc.perform(post("/users/{userId}/events", 1L)
                         .content(mapper.writeValueAsString(newEventDto))

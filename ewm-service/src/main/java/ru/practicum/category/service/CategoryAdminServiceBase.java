@@ -24,7 +24,7 @@ public class CategoryAdminServiceBase implements CategoryAdminService {
 
     @Override
     public CategoryDto updateCategory(Long categoryId, NewCategoryDto newCategoryDto) {
-        Category category = findCategoryByIdOfThrowNotFoundException(categoryId);
+        Category category = findCategoryByIdOrThrowNotFoundException(categoryId);
         categoryMapper.updateCategoryFromNewCategory(newCategoryDto, category);
         category = categoryRepository.save(category);
         return categoryMapper.categoryToCategoryDto(category);
@@ -32,11 +32,11 @@ public class CategoryAdminServiceBase implements CategoryAdminService {
 
     @Override
     public void deleteCategory(Long categoryId) {
-        Category category = findCategoryByIdOfThrowNotFoundException(categoryId);
+        Category category = findCategoryByIdOrThrowNotFoundException(categoryId);
         categoryRepository.deleteById(categoryId);
     }
 
-    private Category findCategoryByIdOfThrowNotFoundException(Long categoryId) {
+    private Category findCategoryByIdOrThrowNotFoundException(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(categoryId, Category.class));
     }

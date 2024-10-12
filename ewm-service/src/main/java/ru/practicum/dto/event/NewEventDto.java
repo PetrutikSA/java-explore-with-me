@@ -10,7 +10,7 @@ public class NewEventDto {
     @Length(min = 20, max = 2000)
     private String annotation;
     @Positive
-    private int categoryId;
+    private long category;
     @Length(min = 20, max = 7000)
     private String description;
     private String eventDate;

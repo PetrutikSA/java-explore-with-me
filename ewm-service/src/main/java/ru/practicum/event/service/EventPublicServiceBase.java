@@ -14,7 +14,15 @@ public class EventPublicServiceBase implements EventPublicService {
     private final EventRepository eventRepository;
 
     @Override
-    public List<EventShortDto> getPublicisedEventsWithFilter(String text, List<Integer> categoriesIds, Boolean paid, String rangeStartString, String rangeEndString, Boolean onlyAvailable, String sort, Integer from, Integer size) {
+    public List<EventShortDto> getPublicisedEventsWithFilter(String text,
+                                                             List<Integer> categoriesIds,
+                                                             Boolean paid,
+                                                             String rangeStartString,
+                                                             String rangeEndString,
+                                                             Boolean onlyAvailable,
+                                                             String sort,
+                                                             Integer from,
+                                                             Integer size) {
         return List.of();
     }
 

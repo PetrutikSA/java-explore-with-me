@@ -38,7 +38,7 @@ public class TestObjectsEvent {
         newEventDto.setPaid(true);
         newEventDto.setDescription(null);
         newEventDto.setLocation(locationDto);
-        newEventDto.setCategoryId(1);
+        newEventDto.setCategory(1);
         newEventDto.setParticipantLimit(50);
         newEventDto.setRequestModeration(true);
 
@@ -68,7 +68,7 @@ public class TestObjectsEvent {
         updateEventUserRequest.setPaid(newEventDto.isPaid());
         updateEventUserRequest.setDescription(newEventDto.getDescription());
         updateEventUserRequest.setLocation(newEventDto.getLocation());
-        updateEventUserRequest.setCategoryId(newEventDto.getCategoryId());
+        updateEventUserRequest.setCategoryId(newEventDto.getCategory());
         updateEventUserRequest.setParticipantLimit(newEventDto.getParticipantLimit());
         updateEventUserRequest.setRequestModeration(newEventDto.isRequestModeration());
         updateEventUserRequest.setStateAction(StateActionUser.CANCEL_REVIEW.toString());
@@ -80,7 +80,7 @@ public class TestObjectsEvent {
         updateEventAdminRequest.setPaid(newEventDto.isPaid());
         updateEventAdminRequest.setDescription(newEventDto.getDescription());
         updateEventAdminRequest.setLocation(newEventDto.getLocation());
-        updateEventAdminRequest.setCategoryId(newEventDto.getCategoryId());
+        updateEventAdminRequest.setCategoryId(newEventDto.getCategory());
         updateEventAdminRequest.setParticipantLimit(newEventDto.getParticipantLimit());
         updateEventAdminRequest.setRequestModeration(newEventDto.isRequestModeration());
         updateEventAdminRequest.setStateAction(StateActionAdmin.PUBLISH_EVENT.toString());

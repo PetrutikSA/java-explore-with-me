@@ -1,5 +1,6 @@
 package ru.practicum.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +19,7 @@ import ru.practicum.model.enums.EventState;
 import java.time.Instant;
 
 @Entity
-@Table(name = "locations")
+@Table(name = "events")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,9 +32,12 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+    @Column(name = "confirmed_requests")
     private int confirmedRequests;
+    @Column(name = "created_on")
     private Instant createdOn;
     private String description;
+    @Column(name = "event_date")
     private Instant eventDate;
     @ManyToOne
     @JoinColumn(name = "initiator_id")
@@ -42,8 +46,11 @@ public class Event {
     @JoinColumn(name = "location_id")
     private Location location;
     private boolean paid;
+    @Column(name = "participant_limit")
     private int participantLimit;
+    @Column(name = "published_on")
     private Instant publishedOn;
+    @Column(name = "request_moderation")
     private boolean requestModeration;
     @Enumerated(EnumType.STRING)
     private EventState state;

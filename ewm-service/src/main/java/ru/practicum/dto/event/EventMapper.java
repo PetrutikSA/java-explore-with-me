@@ -1,9 +1,12 @@
 package ru.practicum.dto.event;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import ru.practicum.dto.category.CategoryMapper;
 import ru.practicum.dto.location.LocationMapper;
 import ru.practicum.dto.user.UserMapper;
@@ -19,7 +22,8 @@ public interface EventMapper {
 
     @Named("stringToInstant")
     default Instant stringToInstant(String instantString) {
-        return DATE_TIME_FORMATTER.parse(instantString, Instant::from);
+        return (instantString != null && !instantString.isBlank()) ?
+                DATE_TIME_FORMATTER.parse(instantString, Instant::from) : null;
     }
 
     @Mapping(target = "id", ignore = true)
@@ -35,7 +39,7 @@ public interface EventMapper {
 
     @Named("instantToString")
     default String instantToString(Instant instant) {
-        return DATE_TIME_FORMATTER.format(instant);
+        return (instant != null) ? DATE_TIME_FORMATTER.format(instant) : null;
     }
 
     @Mapping(target = "eventDate", source = "eventDate", qualifiedByName = "instantToString")
@@ -45,4 +49,13 @@ public interface EventMapper {
 
     @Mapping(target = "eventDate", source = "eventDate", qualifiedByName = "instantToString")
     EventShortDto eventToeventShortDto(Event event);
+
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "publishedOn", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "eventDate", source = "eventDate", qualifiedByName = "stringToInstant")
+    @Mapping(target = "state", source = "stateAction")
+    void updateEventUserRequestIgnoringLocationAndCategoryId(UpdateEventUserRequest updateEventUserRequest,
+                                                             @MappingTarget Event event);
 }
