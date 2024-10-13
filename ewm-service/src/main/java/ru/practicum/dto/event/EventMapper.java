@@ -55,7 +55,15 @@ public interface EventMapper {
     @Mapping(target = "publishedOn", ignore = true)
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "eventDate", source = "eventDate", qualifiedByName = "stringToInstant")
-    @Mapping(target = "state", source = "stateAction")
+    @Mapping(target = "state", ignore = true)
     void updateEventUserRequestIgnoringLocationAndCategoryId(UpdateEventUserRequest updateEventUserRequest,
+                                                             @MappingTarget Event event);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "publishedOn", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "eventDate", source = "eventDate", qualifiedByName = "stringToInstant")
+    @Mapping(target = "state", ignore = true)
+    void updateEventAdminRequestIgnoringLocationAndCategoryId(UpdateEventAdminRequest updateEventAdminRequest,
                                                              @MappingTarget Event event);
 }

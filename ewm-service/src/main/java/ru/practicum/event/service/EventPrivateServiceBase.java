@@ -11,6 +11,7 @@ import ru.practicum.dto.event.EventMapper;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.event.enums.StateActionUser;
 import ru.practicum.dto.event.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.event.request.ParticipationRequestDto;
@@ -22,6 +23,7 @@ import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 import ru.practicum.model.Location;
 import ru.practicum.model.User;
+import ru.practicum.model.enums.EventState;
 import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.user.repository.UserRepository;
 import ru.practicum.util.exception.NotFoundException;
@@ -55,6 +57,7 @@ public class EventPrivateServiceBase implements EventPrivateService {
             event.setLocation(location);
         }
         event.setCreatedOn(Instant.now());
+        event.setState(EventState.CREATED);
         event = eventRepository.save(event);
         return eventMapper.eventToEventFullDto(event);
     }
@@ -91,6 +94,13 @@ public class EventPrivateServiceBase implements EventPrivateService {
         if (newCategoryId != null && newCategoryId != 0) {
             Category newCategory = findCategoryByIdOrThrowNotFoundException(newCategoryId);
             event.setCategory(newCategory);
+        }
+        if (updateEventUserRequest.getStateAction() != null) {
+            StateActionUser stateActionUser = StateActionUser.valueOf(updateEventUserRequest.getStateAction());
+            switch (stateActionUser) {
+                case SEND_TO_REVIEW -> event.setState(EventState.PENDING);
+                case CANCEL_REVIEW -> event.setState(EventState.CANCELED);
+            }
         }
         event = eventRepository.save(event);
         return eventMapper.eventToEventFullDto(event);
