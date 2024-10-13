@@ -11,10 +11,12 @@ import ru.practicum.dto.event.EventMapper;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.event.enums.ParticipationRequestUpdateStatus;
 import ru.practicum.dto.event.enums.StateActionUser;
 import ru.practicum.dto.event.request.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.request.EventRequestStatusUpdateResult;
 import ru.practicum.dto.event.request.ParticipationRequestDto;
+import ru.practicum.dto.event.request.ParticipationRequestMapper;
 import ru.practicum.dto.location.LocationDto;
 import ru.practicum.dto.location.LocationMapper;
 import ru.practicum.event.repository.EventRepository;
@@ -22,14 +24,23 @@ import ru.practicum.event.repository.LocationRepository;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 import ru.practicum.model.Location;
+import ru.practicum.model.ParticipationRequest;
 import ru.practicum.model.User;
 import ru.practicum.model.enums.EventState;
 import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.user.repository.UserRepository;
+import ru.practicum.util.exception.ConflictException;
 import ru.practicum.util.exception.NotFoundException;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import static ru.practicum.model.enums.ParticipationRequestStatus.CONFIRMED;
+import static ru.practicum.model.enums.ParticipationRequestStatus.PENDING;
+import static ru.practicum.model.enums.ParticipationRequestStatus.REJECTED;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +53,7 @@ public class EventPrivateServiceBase implements EventPrivateService {
 
     private final EventMapper eventMapper;
     private final LocationMapper locationMapper;
+    private final ParticipationRequestMapper participationRequestMapper;
 
     @Override
     public EventFullDto createNewEvent(Long userId, NewEventDto newEventDto) {
@@ -108,13 +120,75 @@ public class EventPrivateServiceBase implements EventPrivateService {
 
     @Override
     public List<ParticipationRequestDto> getParticipationRequestsOnEvent(Long userId, Long eventId) {
-        return List.of();
+        findUserByIdOrThrowNotFoundException(userId);
+        Event event = findEventByIdOrThrowNotFoundException(eventId);
+        if (!Objects.equals(userId, event.getInitiator().getId())) {
+            throw new ConflictException(String.format("user id=%d is not initiator of event id=%d", userId, eventId));
+        }
+        return requestRepository.findAllByEventId(eventId).stream()
+                .map(participationRequestMapper::participationRequestToParticipationRequestDto)
+                .toList();
     }
 
     @Override
     public EventRequestStatusUpdateResult responseOnParticipationRequests(
             Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-        return null;
+        User user = findUserByIdOrThrowNotFoundException(userId);
+        Event event = findEventByIdOrThrowNotFoundException(eventId);
+        if (!Objects.equals(userId, event.getInitiator().getId())) {
+            throw new ConflictException(String.format("user id=%d is not initiator of event id=%d", userId, eventId));
+        }
+        List<Long> requestIds = eventRequestStatusUpdateRequest.getRequestIds();
+        List<ParticipationRequest> requests = requestRepository.findAllById(requestIds);
+
+        Optional<ParticipationRequest> isNotPendingStatus = requests.stream()
+                .filter(request -> request.getStatus() != PENDING)
+                .findFirst();
+        if (isNotPendingStatus.isPresent())
+            throw new ConflictException("Only pending requests could be updated");
+
+        ParticipationRequestUpdateStatus status =
+                ParticipationRequestUpdateStatus.valueOf(eventRequestStatusUpdateRequest.getStatus());
+
+        List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
+        List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
+
+        if (status == ParticipationRequestUpdateStatus.REJECTED) {
+            for (ParticipationRequest request : requests) {
+                request.setStatus(REJECTED);
+            }
+
+            requests = requestRepository.saveAll(requests);
+
+            rejectedRequests = requests.stream()
+                    .map(participationRequestMapper::participationRequestToParticipationRequestDto)
+                    .toList();
+        } else {
+            int participantLimit = event.getParticipantLimit();
+            int confirmedRequestsCount = event.getConfirmedRequests();
+
+            if (participantLimit <= confirmedRequestsCount) {
+                throw new ConflictException("Participation limit on event reached");
+            }
+
+            for (ParticipationRequest request : requests) {
+                if (participantLimit > confirmedRequestsCount) {
+                    request.setStatus(CONFIRMED);
+                    confirmedRequests.add(
+                            participationRequestMapper.participationRequestToParticipationRequestDto(request));
+                    confirmedRequestsCount++;
+                } else {
+                    request.setStatus(REJECTED);
+                    rejectedRequests.add(
+                            participationRequestMapper.participationRequestToParticipationRequestDto(request));
+                }
+            }
+        }
+
+        EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
+        result.setConfirmedRequests(confirmedRequests);
+        result.setRejectedRequests(rejectedRequests);
+        return result;
     }
 
     private User findUserByIdOrThrowNotFoundException(Long userId) {

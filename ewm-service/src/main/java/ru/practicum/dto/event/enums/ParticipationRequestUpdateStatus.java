@@ -1,6 +1,6 @@
 package ru.practicum.dto.event.enums;
 
-public enum ParticipationRespondStatus {
+public enum ParticipationRequestUpdateStatus {
     CONFIRMED,
     REJECTED
 }
