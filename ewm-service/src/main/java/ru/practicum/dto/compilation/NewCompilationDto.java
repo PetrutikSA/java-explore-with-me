@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class NewCompilationDto {
-    @Length(min = 1, max = 51)
+    @Length(min = 1, max = 50)
     @NotBlank
     private String title;
     private List<@Positive Long> events;

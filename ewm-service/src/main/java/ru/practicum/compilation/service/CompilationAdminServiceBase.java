@@ -12,6 +12,7 @@ import ru.practicum.model.Compilation;
 import ru.practicum.model.Event;
 import ru.practicum.util.exception.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,8 +27,12 @@ public class CompilationAdminServiceBase implements CompilationAdminService {
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         Compilation compilation = compilationMapper.newCompilationDtoToCompilation(newCompilationDto);
         List<Long> eventsIds = newCompilationDto.getEvents();
-        List<Event> events = eventRepository.findAllById(eventsIds);
-        compilation.setEvents(events);
+        if (eventsIds != null && !eventsIds.isEmpty()) {
+            List<Event> events = eventRepository.findAllById(eventsIds);
+            compilation.setEvents(events);
+        } else {
+            compilation.setEvents(new ArrayList<>());
+        }
         compilation = compilationRepository.save(compilation);
         return compilationMapper.compilationToCompilationDto(compilation);
     }
