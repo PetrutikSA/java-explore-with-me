@@ -49,7 +49,7 @@ public class EventAdminServiceBase implements EventAdminService {
         QEvent qEvent = QEvent.event;
         List<BooleanExpression> conditions = new ArrayList<>();
         if (usersIds != null && !usersIds.isEmpty()) {
-            conditions.add(qEvent.id.in(usersIds));
+            conditions.add(qEvent.initiator.id.in(usersIds));
         }
         if (usersIds != null && !usersIds.isEmpty()) {
             List<EventState> eventStates = states.stream()

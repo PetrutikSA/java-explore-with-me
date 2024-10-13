@@ -183,6 +183,9 @@ public class EventPrivateServiceBase implements EventPrivateService {
                             participationRequestMapper.participationRequestToParticipationRequestDto(request));
                 }
             }
+
+            event.setConfirmedRequests(confirmedRequestsCount);
+            eventRepository.save(event);
         }
 
         EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();

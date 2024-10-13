@@ -1,6 +1,7 @@
 package ru.practicum.dto.event;
 
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.dto.event.enums.StateActionAdmin;
@@ -18,6 +19,7 @@ public class UpdateEventAdminRequest {
     private String eventDate;
     private LocationDto location;
     private Boolean paid;
+    @PositiveOrZero
     private Integer participantLimit;
     private Boolean requestModeration;
     @EnumValidator(enumClazz = StateActionAdmin.class)

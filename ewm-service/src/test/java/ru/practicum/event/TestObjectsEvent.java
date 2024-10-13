@@ -36,7 +36,7 @@ public class TestObjectsEvent {
         newEventDto.setEventDate(DATE_TIME_FORMATTER.format(eventDate));
         newEventDto.setAnnotation("Annotation should be length not less then 20 symbols");
         newEventDto.setPaid(true);
-        newEventDto.setDescription(null);
+        newEventDto.setDescription("Description should be length not less then 20 symbols");
         newEventDto.setLocation(locationDto);
         newEventDto.setCategory(1);
         newEventDto.setParticipantLimit(50);

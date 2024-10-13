@@ -10,9 +10,8 @@ import java.util.List;
 
 @Data
 public class EventRequestStatusUpdateRequest {
-    @Positive
     @NotNull
-    private List<Long> requestIds;
+    private List<@Positive Long> requestIds;
     @EnumValidator(enumClazz = ParticipationRequestUpdateStatus.class)
     private String status;
 }
