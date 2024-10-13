@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EventPublicService {
     List<EventShortDto> getPublicisedEventsWithFilter(String text,
-                                                      List<Integer> categoriesIds,
+                                                      List<Long> categoriesIds,
                                                       Boolean paid,
                                                       String rangeStartString,
                                                       String rangeEndString,

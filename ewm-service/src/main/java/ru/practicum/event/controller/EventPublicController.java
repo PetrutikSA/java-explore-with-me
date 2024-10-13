@@ -30,7 +30,7 @@ public class EventPublicController {
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getPublicisedEventsWithFilter(
             @RequestParam(name = "text", required = false) String text,
-            @RequestParam(name = "categories", required = false) List<@Positive Integer> categoriesIds,
+            @RequestParam(name = "categories", required = false) List<@Positive Long> categoriesIds,
             @RequestParam(name = "paid", required = false) Boolean paid,
             @RequestParam(name = "rangeStart", required = false) String rangeStartString,
             @RequestParam(name = "rangeEnd", required = false) String rangeEndString,
