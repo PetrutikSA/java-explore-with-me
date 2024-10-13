@@ -60,5 +60,6 @@ CREATE TABLE IF NOT EXISTS participation_requests (
   requester_id BIGINT REFERENCES users(id),
   status VARCHAR(255),
   created TIMESTAMP,
-  CONSTRAINT pk_participation_requests PRIMARY KEY (id)
+  CONSTRAINT pk_participation_requests PRIMARY KEY (id),
+  CONSTRAINT uq_requester_id_event_id UNIQUE(requester_id, event_id)
 );

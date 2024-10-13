@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.util.exception.ConflictException;
 import ru.practicum.util.exception.NotFoundException;
 
 import java.time.Instant;
@@ -65,6 +66,18 @@ public class ErrorHandler {
                 .message(notFoundException.getMessage())
                 .reason("The required object was not found.")
                 .status(HttpStatus.NOT_FOUND.toString())
+                .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
+                .build();
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleConflictException(ConflictException conflictException) {
+        return ApiError.builder()
+                .errors(List.of(conflictException.getStackTrace()))
+                .message(conflictException.getMessage())
+                .reason("Incorrectly made request.")
+                .status(HttpStatus.CONFLICT.toString())
                 .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
                 .build();
     }
