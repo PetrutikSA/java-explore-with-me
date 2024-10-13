@@ -10,6 +10,6 @@ import java.util.List;
 public class UpdateCompilationRequest {
     @Length(min = 1, max = 50)
     private String title;
-    private List<@Positive Integer> events;
+    private List<@Positive Long> events;
     private Boolean pinned;
 }

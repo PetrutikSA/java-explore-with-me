@@ -10,6 +10,6 @@ import java.util.List;
 public class NewCompilationDto {
     @Length(min = 1, max = 50)
     private String title;
-    private List<@Positive Integer> events;
+    private List<@Positive Long> events;
     private boolean pinned = false;
 }
