@@ -1,9 +1,15 @@
 package ru.practicum.compilation.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.dto.compilation.CompilationDto;
+import ru.practicum.dto.compilation.CompilationMapper;
+import ru.practicum.model.Compilation;
+import ru.practicum.util.exception.NotFoundException;
 
 import java.util.List;
 
@@ -12,13 +18,26 @@ import java.util.List;
 public class CompilationPublicServiceBase implements CompilationPublicService {
     private final CompilationRepository compilationRepository;
 
+    private final CompilationMapper compilationMapper;
+
     @Override
     public List<CompilationDto> getFilteredCompilations(Boolean pinned, Integer from, Integer size) {
-        return List.of();
+        Pageable pageable = PageRequest.of(from, size);
+        Page<Compilation> compilationPage;
+        if (pinned != null) {
+            compilationPage = compilationRepository.findAllByPinned(pinned, pageable);
+        } else {
+            compilationPage = compilationRepository.findAll(pageable);
+        }
+        return compilationPage.stream()
+                .map(compilationMapper::compilationToCompilationDto)
+                .toList();
     }
 
     @Override
     public CompilationDto getCompilationById(Long compId) {
-        return null;
+        Compilation compilation = compilationRepository.findById(compId)
+                .orElseThrow(() -> new NotFoundException(compId, Compilation.class));
+        return compilationMapper.compilationToCompilationDto(compilation);
     }
 }
