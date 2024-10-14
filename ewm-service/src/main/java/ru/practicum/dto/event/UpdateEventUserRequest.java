@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.dto.event.enums.StateActionUser;
 import ru.practicum.dto.location.LocationDto;
+import ru.practicum.dto.validation.date.AfterCurrentTimeBy;
 import ru.practicum.dto.validation.enums.EnumValidator;
 
 @Data
@@ -16,6 +17,7 @@ public class UpdateEventUserRequest {
     private Long categoryId;
     @Length(min = 20, max = 7000)
     private String description;
+    @AfterCurrentTimeBy(hours = 2)
     private String eventDate;
     private LocationDto location;
     private Boolean paid;

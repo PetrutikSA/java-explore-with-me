@@ -6,6 +6,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.dto.location.LocationDto;
+import ru.practicum.dto.validation.date.AfterCurrentTimeBy;
 
 @Data
 public class NewEventDto {
@@ -17,6 +18,7 @@ public class NewEventDto {
     private String description;
     @Positive
     private long category;
+    @AfterCurrentTimeBy(hours = 2)
     private String eventDate;
     private LocationDto location;
     private boolean paid = false;
