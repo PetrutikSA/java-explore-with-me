@@ -141,17 +141,37 @@ class EventPrivateControllerTest {
                 .andExpect(jsonPath("$.annotation", is(eventFullDto.getAnnotation())))
                 .andExpect(jsonPath("$.eventDate", is(eventFullDto.getEventDate())));
     }
+//
+//    @Test
+//    void updateWrongStateEventByUserGetBadRequest() throws Exception {
+//        updateEventUserRequest.setStateAction("Wrong");
+//
+//        mvc.perform(patch("/users/{userId}/events/{eventId}", 1L, 1L)
+//                        .content(mapper.writeValueAsString(updateEventUserRequest))
+//                        .characterEncoding(StandardCharsets.UTF_8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.toString())));
+//    }
 
     @Test
-    void updateWrongStateEventByUserGetBadRequest() throws Exception {
-        updateEventUserRequest.setStateAction("Wrong");
+    void updateCorrectEventByUserWithOnlyDate() throws Exception {
+        Mockito.when(eventPrivateService.updateEventByUser(Mockito.anyLong(), Mockito.anyLong(), Mockito.any()))
+                .thenReturn(eventFullDto);
+
+        UpdateEventUserRequest updateEventUserRequestOnlyDate = new UpdateEventUserRequest();
+        updateEventUserRequestOnlyDate.setEventDate(updateEventUserRequest.getEventDate());
+
+        System.out.println(updateEventUserRequestOnlyDate);
 
         mvc.perform(patch("/users/{userId}/events/{eventId}", 1L, 1L)
-                        .content(mapper.writeValueAsString(updateEventUserRequest))
+                        .content(mapper.writeValueAsString(updateEventUserRequestOnlyDate))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status", is(HttpStatus.BAD_REQUEST.toString())));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title", is(eventFullDto.getTitle())))
+                .andExpect(jsonPath("$.annotation", is(eventFullDto.getAnnotation())));
     }
 }

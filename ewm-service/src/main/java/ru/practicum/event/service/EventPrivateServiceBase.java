@@ -29,9 +29,11 @@ import ru.practicum.model.User;
 import ru.practicum.model.enums.EventState;
 import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.user.repository.UserRepository;
+import ru.practicum.util.exception.BadRequestException;
 import ru.practicum.util.exception.ConflictException;
 import ru.practicum.util.exception.NotFoundException;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +96,11 @@ public class EventPrivateServiceBase implements EventPrivateService {
     public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         findUserByIdOrThrowNotFoundException(userId);
         Event event = findEventByIdOrThrowNotFoundException(eventId);
+        if (event.getState() == EventState.PUBLISHED)
+            throw new ConflictException("Couldn't update published event");
         eventMapper.updateEventUserRequestIgnoringLocationAndCategoryId(updateEventUserRequest, event);
+        if (event.getEventDate().isBefore(Instant.now().plus(Duration.ofHours(2))))
+            throw new BadRequestException("Event date must be after current time not less then by 2 hours");
         LocationDto newLocationDto = updateEventUserRequest.getLocation();
         if (newLocationDto != null) {
             Location location = event.getLocation();

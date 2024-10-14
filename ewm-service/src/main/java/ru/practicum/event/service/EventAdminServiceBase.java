@@ -20,6 +20,7 @@ import ru.practicum.model.Event;
 import ru.practicum.model.Location;
 import ru.practicum.model.QEvent;
 import ru.practicum.model.enums.EventState;
+import ru.practicum.util.exception.ConflictException;
 import ru.practicum.util.exception.NotFoundException;
 
 import java.time.Instant;
@@ -106,8 +107,18 @@ public class EventAdminServiceBase implements EventAdminService {
         if (updateEventAdminRequest.getStateAction() != null) {
             StateActionAdmin stateActionAdmin = StateActionAdmin.valueOf(updateEventAdminRequest.getStateAction());
             switch (stateActionAdmin) {
-                case PUBLISH_EVENT -> event.setState(EventState.PUBLISHED);
-                case REJECT_EVENT -> event.setState(EventState.CANCELED);
+                case PUBLISH_EVENT -> {
+                    if (event.getState() == EventState.PUBLISHED)
+                        throw new ConflictException("Event already published");
+                    if (event.getState() == EventState.CANCELED)
+                        throw new ConflictException("Couldn't publish canceled event");
+                    event.setState(EventState.PUBLISHED);
+                }
+                case REJECT_EVENT -> {
+                    if (event.getState() == EventState.PUBLISHED)
+                        throw new ConflictException("Couldn't cancel published event");
+                    event.setState(EventState.CANCELED);
+                }
             }
         }
         event = eventRepository.save(event);

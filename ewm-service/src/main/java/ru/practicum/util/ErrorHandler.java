@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.util.exception.BadRequestException;
 import ru.practicum.util.exception.ConflictException;
 import ru.practicum.util.exception.NotFoundException;
 
@@ -78,6 +79,18 @@ public class ErrorHandler {
                 .message(conflictException.getMessage())
                 .reason("Incorrectly made request.")
                 .status(HttpStatus.CONFLICT.toString())
+                .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
+                .build();
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleBadRequestException(BadRequestException badRequestException) {
+        return ApiError.builder()
+                .errors(List.of(badRequestException.getStackTrace()))
+                .message("Invalid parameter")
+                .reason(badRequestException.getMessage())
+                .status(HttpStatus.BAD_REQUEST.toString())
                 .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
                 .build();
     }

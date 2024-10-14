@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = AfterCurrentTimeByConstraint.class)
 public @interface AfterCurrentTimeBy {
     int hours();
-    String message() default "must be any of enum {enum}";
+    String message() default "must be after current time by {hours} hours";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
