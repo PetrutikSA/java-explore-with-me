@@ -43,11 +43,16 @@ public class RequestPrivateServiceBase implements RequestPrivateService {
         ParticipationRequest participationRequest = new ParticipationRequest();
         participationRequest.setRequester(user);
         participationRequest.setEvent(event);
-        ParticipationRequestStatus status = (event.isRequestModeration()) ?
-                ParticipationRequestStatus.PENDING : ParticipationRequestStatus.CONFIRMED;
+        ParticipationRequestStatus status = (!event.isRequestModeration() || event.getParticipantLimit() == 0) ?
+                ParticipationRequestStatus.CONFIRMED : ParticipationRequestStatus.PENDING;
         participationRequest.setStatus(status);
         participationRequest.setCreated(Instant.now());
+
         participationRequest = requestRepository.save(participationRequest);
+        if (status == ParticipationRequestStatus.CONFIRMED) {
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+            eventRepository.save(event);
+        }
         return participationRequestMapper.participationRequestToParticipationRequestDto(participationRequest);
     }
 

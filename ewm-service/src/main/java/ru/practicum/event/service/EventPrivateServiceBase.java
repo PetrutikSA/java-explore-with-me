@@ -69,7 +69,7 @@ public class EventPrivateServiceBase implements EventPrivateService {
             event.setLocation(location);
         }
         event.setCreatedOn(Instant.now());
-        event.setState(EventState.CREATED);
+        event.setState(EventState.PENDING);
         event = eventRepository.save(event);
         return eventMapper.eventToEventFullDto(event);
     }

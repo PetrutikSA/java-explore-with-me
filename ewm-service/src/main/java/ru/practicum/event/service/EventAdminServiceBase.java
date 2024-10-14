@@ -51,7 +51,7 @@ public class EventAdminServiceBase implements EventAdminService {
         if (usersIds != null && !usersIds.isEmpty()) {
             conditions.add(qEvent.initiator.id.in(usersIds));
         }
-        if (usersIds != null && !usersIds.isEmpty()) {
+        if (states != null && !states.isEmpty()) {
             List<EventState> eventStates = states.stream()
                     .map(EventState::valueOf)
                     .toList();
