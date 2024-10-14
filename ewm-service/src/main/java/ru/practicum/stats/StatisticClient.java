@@ -1,9 +1,9 @@
-package ru.practicum;
+package ru.practicum.stats;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 import ru.practicum.ewm.stats.dto.EndpointHitDto;
 import ru.practicum.ewm.stats.dto.ViewStatsDto;
 
@@ -13,13 +13,15 @@ import java.util.List;
 
 import static ru.practicum.ewm.stats.util.Constants.DATE_TIME_FORMATTER;
 
-public class StatsClient {
-
+@Service
+public class StatisticClient {
     private final RestClient restClient;
     private static final String BASE_URL = "http://localhost:9090";
 
-    public StatsClient(RestTemplate restTemplate) {
-        this.restClient = RestClient.create(restTemplate);
+    public StatisticClient() {
+        this.restClient = RestClient.builder()
+                .baseUrl(BASE_URL)
+                .build();
     }
 
     public EndpointHitDto createRecord(EndpointHitDto endpointHitDto) {

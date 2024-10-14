@@ -58,6 +58,10 @@
             <artifactId>querydsl-jpa</artifactId>
             <classifier>jakarta</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

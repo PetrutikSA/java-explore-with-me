@@ -1,5 +1,6 @@
 package ru.practicum.user.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -15,11 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.StatRestTemplateClient;
 import ru.practicum.dto.user.NewUserRequest;
 import ru.practicum.dto.user.UserDto;
+import ru.practicum.ewm.stats.dto.EndpointHitDto;
 import ru.practicum.user.service.UserService;
 
+import java.time.Instant;
 import java.util.List;
+
+import static ru.practicum.ewm.stats.util.Constants.DATE_TIME_FORMATTER;
 
 @RestController
 @RequestMapping("/admin/users")
@@ -27,10 +33,18 @@ import java.util.List;
 @Validated
 public class UserController {
     private final UserService userService;
+    private final StatRestTemplateClient statsClient;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody @Valid NewUserRequest newUserRequest) {
+    public UserDto createUser(@RequestBody @Valid NewUserRequest newUserRequest, HttpServletRequest request) {
+        EndpointHitDto endpointHitDto = EndpointHitDto.builder()
+                .app("evm-service")
+                .ip(request.getRemoteAddr())
+                .uri(request.getRequestURI())
+                .timestamp(DATE_TIME_FORMATTER.format(Instant.now()))
+                .build();
+        statsClient.createRecord(endpointHitDto);
         return userService.createUser(newUserRequest);
     }
 
@@ -39,13 +53,14 @@ public class UserController {
     public List<UserDto> getUsers(
             @RequestParam(name = "ids", required = false) List<@Positive Long> ids,
             @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size) {
+            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size,
+            HttpServletRequest request) {
         return userService.getUsers(ids, from, size);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable @Positive Long userId) {
+    public void deleteUser(@PathVariable @Positive Long userId, HttpServletRequest request) {
         userService.deleteUser(userId);
     }
 }
