@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class StatRestTemplateClient {
     private final RestTemplate rest;
-    private static final String BASE_URL = "http://localhost:9090";
+    private static final String BASE_URL = "http://stats-server:9090";
 
     public StatRestTemplateClient(RestTemplateBuilder builder) {
         this.rest = builder
