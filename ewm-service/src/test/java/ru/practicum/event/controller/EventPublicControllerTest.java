@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.StatsClient;
 import ru.practicum.category.TestObjectsCategory;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
@@ -30,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EventPublicControllerTest {
     @MockBean
     private final EventPublicService eventPublicService;
+    @MockBean
+    private final StatsClient statsClient;
 
     private final MockMvc mvc;
 

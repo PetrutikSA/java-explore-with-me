@@ -1,5 +1,6 @@
 package ru.practicum.event.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.StatsClient;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.validation.enums.EnumValidator;
 import ru.practicum.event.enums.EventsSort;
 import ru.practicum.event.service.EventPublicService;
+import ru.practicum.ewm.stats.dto.EndpointHitDto;
 
 import java.util.List;
+
+import static ru.practicum.config.EWMServiceAppConfig.APP_NAME;
 
 @RestController
 @RequestMapping("/events")
@@ -25,6 +30,7 @@ import java.util.List;
 @Validated
 public class EventPublicController {
     private final EventPublicService eventPublicService;
+    private final StatsClient statsClient;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -37,14 +43,18 @@ public class EventPublicController {
             @RequestParam(name = "onlyAvailable", required = false, defaultValue = "false") Boolean onlyAvailable,
             @RequestParam(name = "sort", required = false) @EnumValidator(enumClazz = EventsSort.class) String sort,
             @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size) {
+            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size,
+            HttpServletRequest request) {
+        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
         return eventPublicService.getPublicisedEventsWithFilter(
                 text, categoriesIds, paid, rangeStartString, rangeEndString, onlyAvailable, sort, from, size);
     }
 
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventFullDto getEventById(@PathVariable @Positive Long eventId) {
+    public EventFullDto getEventById(@PathVariable @Positive Long eventId,
+                                     HttpServletRequest request) {
+        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
         return eventPublicService.getEventById(eventId);
     }
 }

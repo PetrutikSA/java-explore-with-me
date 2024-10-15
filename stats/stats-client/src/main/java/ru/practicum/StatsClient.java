@@ -15,10 +15,10 @@ import static ru.practicum.ewm.stats.util.Constants.DATE_TIME_FORMATTER;
 public class StatsClient {
 
     private final RestClient restClient;
-    private static final String BASE_URL = "http://localhost:9090";
+    private static final String BASE_URL = "http://stats-server:9090";
 
-    public StatsClient(RestClient.Builder builder) {
-        this.restClient = builder
+    public StatsClient() {
+        this.restClient = RestClient.builder()
                 .baseUrl(BASE_URL)
                 .build();
     }

@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.StatsClient;
 import ru.practicum.category.TestObjectsCategory;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
@@ -32,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EventAdminControllerTest {
     @MockBean
     private final EventAdminService eventAdminService;
+    @MockBean
+    private final StatsClient statsClient;
 
     private final ObjectMapper mapper;
     private final MockMvc mvc;

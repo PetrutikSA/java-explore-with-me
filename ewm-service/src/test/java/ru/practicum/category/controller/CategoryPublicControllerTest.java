@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.StatsClient;
 import ru.practicum.category.TestObjectsCategory;
 import ru.practicum.category.service.CategoryPublicService;
 import ru.practicum.dto.category.CategoryDto;
@@ -27,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CategoryPublicControllerTest {
     @MockBean
     private final CategoryPublicService categoryPublicService;
+    @MockBean
+    private final StatsClient statsClient;
 
     private final MockMvc mvc;
 

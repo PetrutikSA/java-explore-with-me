@@ -1,5 +1,6 @@
 package ru.practicum.category.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -12,10 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.StatsClient;
 import ru.practicum.category.service.CategoryPublicService;
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.ewm.stats.dto.EndpointHitDto;
 
 import java.util.List;
+
+import static ru.practicum.config.EWMServiceAppConfig.APP_NAME;
 
 @RestController
 @RequestMapping("/categories")
@@ -23,10 +28,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryPublicController {
     private final CategoryPublicService categoryPublicService;
+    private final StatsClient statsClient;
 
     @GetMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto getCategoryById(@PathVariable @Positive @NotNull Long categoryId) {
+    public CategoryDto getCategoryById(@PathVariable @Positive @NotNull Long categoryId, HttpServletRequest request) {
+        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
         return categoryPublicService.getCategoryById(categoryId);
     }
 
@@ -34,7 +41,9 @@ public class CategoryPublicController {
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> getCategories(
             @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size) {
+            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size,
+            HttpServletRequest request) {
+        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
         return categoryPublicService.getCategories(from, size);
     }
 }
