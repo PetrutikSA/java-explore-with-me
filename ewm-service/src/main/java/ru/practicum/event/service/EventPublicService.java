@@ -16,5 +16,5 @@ public interface EventPublicService {
                                                       Integer from,
                                                       Integer size);
 
-    EventFullDto getEventById(Long eventId);
+    EventFullDto getEventById(Long eventId, boolean uniqueRequest);
 }

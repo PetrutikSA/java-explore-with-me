@@ -78,7 +78,7 @@ class EventPublicControllerTest {
     void getEventByIdCorrect() throws Exception {
         Long eventId = 1L;
 
-        Mockito.when(eventPublicService.getEventById(Mockito.anyLong()))
+        Mockito.when(eventPublicService.getEventById(Mockito.anyLong(), Mockito.anyBoolean()))
                 .thenReturn(eventFullDto);
 
         mvc.perform(get("/events/{eventId}", eventId)

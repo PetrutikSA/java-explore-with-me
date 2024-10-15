@@ -93,9 +93,14 @@ public class EventPublicServiceBase implements EventPublicService {
     }
 
     @Override
-    public EventFullDto getEventById(Long eventId) {
+    public EventFullDto getEventById(Long eventId, boolean uniqueRequest) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(() -> new NotFoundException(eventId, Event.class));
+        if (uniqueRequest) {
+            long views = event.getViews() + 1;
+            event.setViews(views);
+            event = eventRepository.save(event);
+        }
         return eventMapper.eventToEventFullDto(event);
     }
 }

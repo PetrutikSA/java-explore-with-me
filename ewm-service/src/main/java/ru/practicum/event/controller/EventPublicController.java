@@ -19,8 +19,11 @@ import ru.practicum.dto.validation.enums.EnumValidator;
 import ru.practicum.event.enums.EventsSort;
 import ru.practicum.event.service.EventPublicService;
 import ru.practicum.ewm.stats.dto.EndpointHitDto;
+import ru.practicum.ewm.stats.dto.ViewStatsDto;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static ru.practicum.config.EWMServiceAppConfig.APP_NAME;
 
@@ -54,7 +57,23 @@ public class EventPublicController {
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEventById(@PathVariable @Positive Long eventId,
                                      HttpServletRequest request) {
-        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
-        return eventPublicService.getEventById(eventId);
+        String uri = request.getRequestURI();
+        long hitsBefore = getEndpointUniqueHits(uri);
+        statsClient.createRecord(new EndpointHitDto(APP_NAME, uri, request.getRemoteAddr()));
+        long hitsAfter = getEndpointUniqueHits(uri);
+        boolean uniqueRequest = hitsAfter > hitsBefore;
+        return eventPublicService.getEventById(eventId, uniqueRequest);
+    }
+
+    private long getEndpointUniqueHits(String uri) {
+        long hits = 0;
+        Optional<ViewStatsDto> viewStatsDtoOptional =
+                statsClient.getStats(Instant.EPOCH, Instant.now(), List.of(uri), true).stream()
+                        .filter(viewStatsDto -> viewStatsDto.getApp().equals(APP_NAME))
+                        .findFirst();
+        if (viewStatsDtoOptional.isPresent()) {
+            hits = viewStatsDtoOptional.get().getHits();
+        }
+        return hits;
     }
 }
