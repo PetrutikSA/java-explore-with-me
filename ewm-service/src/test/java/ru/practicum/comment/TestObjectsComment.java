@@ -13,7 +13,9 @@ import static ru.practicum.config.EWMServiceAppConfig.DATE_TIME_FORMATTER;
 public class TestObjectsComment {
     public Instant created = Instant.now();
     public Comment comment;
+    public Comment updatedComment;
     public CommentDto commentDto;
+    public CommentDto updatedCommentDto;
     public NewCommentDto newCommentDto;
     public NewCommentDto updateCommentDto;
 
@@ -38,5 +40,19 @@ public class TestObjectsComment {
         commentDto.setEventId(comment.getEvent().getId());
         commentDto.setUserId(comment.getUser().getId());
         commentDto.setCreated(DATE_TIME_FORMATTER.format(created));
+
+        updatedComment = new Comment();
+        updatedComment.setId(comment.getId());
+        updatedComment.setText(updateCommentDto.getText());
+        updatedComment.setEvent(comment.getEvent());
+        updatedComment.setUser(comment.getUser());
+        updatedComment.setCreated(comment.getCreated());
+
+        updatedCommentDto = new CommentDto();
+        updatedCommentDto.setId(updatedComment.getId());
+        updatedCommentDto.setText(updatedComment.getText());
+        updatedCommentDto.setEventId(updatedComment.getEvent().getId());
+        updatedCommentDto.setUserId(updatedComment.getUser().getId());
+        updatedCommentDto.setCreated(DATE_TIME_FORMATTER.format(updatedComment.getCreated()));
     }
 }

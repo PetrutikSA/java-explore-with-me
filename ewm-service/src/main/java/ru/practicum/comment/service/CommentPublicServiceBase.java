@@ -36,7 +36,7 @@ public class CommentPublicServiceBase implements CommentPublicService {
     @Override
     public CommentDto getCommentById(Long eventId, Long commentId) {
         checkEventByIdOrThrowNotFoundException(eventId);
-        Comment comment = commentRepository.findById(eventId)
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(commentId, Comment.class));
         if (!Objects.equals(comment.getEvent().getId(), eventId))
             throw new ConflictException("Event id not equal to comment event id");
