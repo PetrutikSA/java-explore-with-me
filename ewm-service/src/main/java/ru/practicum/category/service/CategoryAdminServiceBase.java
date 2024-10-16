@@ -32,7 +32,7 @@ public class CategoryAdminServiceBase implements CategoryAdminService {
 
     @Override
     public void deleteCategory(Long categoryId) {
-        Category category = findCategoryByIdOrThrowNotFoundException(categoryId);
+        findCategoryByIdOrThrowNotFoundException(categoryId);
         categoryRepository.deleteById(categoryId);
     }
 
