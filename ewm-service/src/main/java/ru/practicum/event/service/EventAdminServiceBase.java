@@ -17,21 +17,16 @@ import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.repository.LocationRepository;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
-import ru.practicum.model.Location;
 import ru.practicum.model.QEvent;
 import ru.practicum.model.enums.EventState;
 import ru.practicum.util.exception.ConflictException;
-import ru.practicum.util.exception.NotFoundException;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.practicum.config.EWMServiceAppConfig.DATE_TIME_FORMATTER;
-
 @Service
 @RequiredArgsConstructor
-public class EventAdminServiceBase implements EventAdminService {
+public class EventAdminServiceBase extends EventServiceUtil implements EventAdminService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
@@ -63,12 +58,10 @@ public class EventAdminServiceBase implements EventAdminService {
             conditions.add(qEvent.category.in(categoryList));
         }
         if (rangeStartString != null && !rangeStartString.isBlank()) {
-            Instant rangeStartInstant = DATE_TIME_FORMATTER.parse(rangeStartString, Instant::from);
-            conditions.add(qEvent.eventDate.after(rangeStartInstant));
+            conditions.add(eventDateAfter(rangeStartString));
         }
         if (rangeEndString != null && !rangeEndString.isBlank()) {
-            Instant rangeEndInstant = DATE_TIME_FORMATTER.parse(rangeEndString, Instant::from);
-            conditions.add(qEvent.eventDate.before(rangeEndInstant));
+            conditions.add(eventDateBefore(rangeEndString));
         }
 
         Page<Event> result;
@@ -88,20 +81,15 @@ public class EventAdminServiceBase implements EventAdminService {
 
     @Override
     public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException(eventId, Event.class));
+        Event event = findEventByIdOrThrowNotFoundException(eventId, eventRepository);
         eventMapper.updateEventAdminRequestIgnoringLocationAndCategoryId(updateEventAdminRequest, event);
         LocationDto newLocationDto = updateEventAdminRequest.getLocation();
         if (newLocationDto != null) {
-            Location location = event.getLocation();
-            locationMapper.updateLocationWithLocationDto(newLocationDto, location);
-            location = locationRepository.save(location);
-            event.setLocation(location);
+            updateLocation(event, locationRepository, locationMapper, newLocationDto);
         }
         Long newCategoryId = updateEventAdminRequest.getCategoryId();
         if (newCategoryId != null && newCategoryId != 0) {
-            Category newCategory = categoryRepository.findById(newCategoryId)
-                    .orElseThrow(() -> new NotFoundException(newCategoryId, Category.class));
+            Category newCategory = findCategoryByIdOrThrowNotFoundException(newCategoryId, categoryRepository);
             event.setCategory(newCategory);
         }
         if (updateEventAdminRequest.getStateAction() != null) {

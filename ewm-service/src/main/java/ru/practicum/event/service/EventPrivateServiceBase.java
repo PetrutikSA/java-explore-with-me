@@ -45,7 +45,7 @@ import static ru.practicum.model.enums.ParticipationRequestStatus.REJECTED;
 
 @Service
 @RequiredArgsConstructor
-public class EventPrivateServiceBase implements EventPrivateService {
+public class EventPrivateServiceBase extends EventServiceUtil implements EventPrivateService {
     private final EventRepository eventRepository;
     private final RequestRepository requestRepository;
     private final LocationRepository locationRepository;
@@ -59,7 +59,7 @@ public class EventPrivateServiceBase implements EventPrivateService {
     @Override
     public EventFullDto createNewEvent(Long userId, NewEventDto newEventDto) {
         User initiator = findUserByIdOrThrowNotFoundException(userId);
-        Category category = findCategoryByIdOrThrowNotFoundException(newEventDto.getCategory());
+        Category category = findCategoryByIdOrThrowNotFoundException(newEventDto.getCategory(), categoryRepository);
         Event event = eventMapper.newEventDtoToEvent(newEventDto);
 
         event.setInitiator(initiator);
@@ -87,14 +87,14 @@ public class EventPrivateServiceBase implements EventPrivateService {
 
     @Override
     public EventFullDto getEventById(Long userId, Long eventId) {
-        Event event = findEventByIdOrThrowNotFoundException(eventId);
+        Event event = findEventByIdOrThrowNotFoundException(eventId, eventRepository);
         return eventMapper.eventToEventFullDto(event);
     }
 
     @Override
     public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         findUserByIdOrThrowNotFoundException(userId);
-        Event event = findEventByIdOrThrowNotFoundException(eventId);
+        Event event = findEventByIdOrThrowNotFoundException(eventId, eventRepository);
         if (event.getState() == EventState.PUBLISHED)
             throw new ConflictException("Couldn't update published event");
         eventMapper.updateEventUserRequestIgnoringLocationAndCategoryId(updateEventUserRequest, event);
@@ -102,14 +102,11 @@ public class EventPrivateServiceBase implements EventPrivateService {
             throw new BadRequestException("Event date must be after current time not less then by 2 hours");
         LocationDto newLocationDto = updateEventUserRequest.getLocation();
         if (newLocationDto != null) {
-            Location location = event.getLocation();
-            locationMapper.updateLocationWithLocationDto(newLocationDto, location);
-            location = locationRepository.save(location);
-            event.setLocation(location);
+            updateLocation(event, locationRepository, locationMapper, newLocationDto);
         }
         Long newCategoryId = updateEventUserRequest.getCategoryId();
         if (newCategoryId != null && newCategoryId != 0) {
-            Category newCategory = findCategoryByIdOrThrowNotFoundException(newCategoryId);
+            Category newCategory = findCategoryByIdOrThrowNotFoundException(newCategoryId, categoryRepository);
             event.setCategory(newCategory);
         }
         if (updateEventUserRequest.getStateAction() != null) {
@@ -126,7 +123,7 @@ public class EventPrivateServiceBase implements EventPrivateService {
     @Override
     public List<ParticipationRequestDto> getParticipationRequestsOnEvent(Long userId, Long eventId) {
         findUserByIdOrThrowNotFoundException(userId);
-        Event event = findEventByIdOrThrowNotFoundException(eventId);
+        Event event = findEventByIdOrThrowNotFoundException(eventId, eventRepository);
         if (!Objects.equals(userId, event.getInitiator().getId())) {
             throw new ConflictException(String.format("user id=%d is not initiator of event id=%d", userId, eventId));
         }
@@ -139,7 +136,7 @@ public class EventPrivateServiceBase implements EventPrivateService {
     public EventRequestStatusUpdateResult responseOnParticipationRequests(
             Long userId, Long eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         User user = findUserByIdOrThrowNotFoundException(userId);
-        Event event = findEventByIdOrThrowNotFoundException(eventId);
+        Event event = findEventByIdOrThrowNotFoundException(eventId, eventRepository);
         if (!Objects.equals(userId, event.getInitiator().getId())) {
             throw new ConflictException(String.format("user id=%d is not initiator of event id=%d", userId, eventId));
         }
@@ -202,15 +199,5 @@ public class EventPrivateServiceBase implements EventPrivateService {
     private User findUserByIdOrThrowNotFoundException(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(userId, User.class));
-    }
-
-    private Category findCategoryByIdOrThrowNotFoundException(Long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException(categoryId, Category.class));
-    }
-
-    private Event findEventByIdOrThrowNotFoundException(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException(eventId, Event.class));
     }
 }

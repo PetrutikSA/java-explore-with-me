@@ -19,15 +19,12 @@ import ru.practicum.model.QEvent;
 import ru.practicum.model.enums.EventState;
 import ru.practicum.util.exception.NotFoundException;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.practicum.config.EWMServiceAppConfig.DATE_TIME_FORMATTER;
-
 @Service
 @RequiredArgsConstructor
-public class EventPublicServiceBase implements EventPublicService {
+public class EventPublicServiceBase extends EventServiceUtil implements EventPublicService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
@@ -38,7 +35,7 @@ public class EventPublicServiceBase implements EventPublicService {
                                                              Boolean paid,
                                                              String rangeStartString,
                                                              String rangeEndString,
-                                                             Boolean onlyAvailable, //def
+                                                             Boolean onlyAvailable,
                                                              String sort,
                                                              Integer from,
                                                              Integer size) {
@@ -57,12 +54,10 @@ public class EventPublicServiceBase implements EventPublicService {
             conditions.add(qEvent.paid.eq(paid));
         }
         if (rangeStartString != null && !rangeStartString.isBlank()) {
-            Instant rangeStartInstant = DATE_TIME_FORMATTER.parse(rangeStartString, Instant::from);
-            conditions.add(qEvent.eventDate.after(rangeStartInstant));
+            conditions.add(eventDateAfter(rangeStartString));
         }
         if (rangeEndString != null && !rangeEndString.isBlank()) {
-            Instant rangeEndInstant = DATE_TIME_FORMATTER.parse(rangeEndString, Instant::from);
-            conditions.add(qEvent.eventDate.before(rangeEndInstant));
+            conditions.add(eventDateBefore(rangeEndString));
         }
 
         Pageable pageable;
