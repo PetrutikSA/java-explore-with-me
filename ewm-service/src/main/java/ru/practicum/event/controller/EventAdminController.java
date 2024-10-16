@@ -1,6 +1,5 @@
 package ru.practicum.event.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -15,15 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.StatsClient;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.event.service.EventAdminService;
-import ru.practicum.ewm.stats.dto.EndpointHitDto;
 
 import java.util.List;
-
-import static ru.practicum.config.EWMServiceAppConfig.APP_NAME;
 
 @RestController
 @RequestMapping("/admin/events")
@@ -31,7 +26,6 @@ import static ru.practicum.config.EWMServiceAppConfig.APP_NAME;
 @Validated
 public class EventAdminController {
     private final EventAdminService eventAdminService;
-    private final StatsClient statsClient;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -42,10 +36,8 @@ public class EventAdminController {
             @RequestParam(name = "rangeStart", required = false) String rangeStartString,
             @RequestParam(name = "rangeEnd", required = false) String rangeEndString,
             @RequestParam(name = "from", required = false, defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size,
-            HttpServletRequest request
+            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive Integer size
     ) {
-        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
         return eventAdminService.getAllEventsWithFilter(
                 usersIds, states, categoriesIds, rangeStartString, rangeEndString, from, size);
     }
@@ -53,9 +45,7 @@ public class EventAdminController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto updateEventByAdmin(@PathVariable @Positive Long eventId,
-                                           @RequestBody @Valid UpdateEventAdminRequest updateEventAdminRequest,
-                                           HttpServletRequest request) {
-        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
+                                           @RequestBody @Valid UpdateEventAdminRequest updateEventAdminRequest) {
         return eventAdminService.updateEventByAdmin(eventId, updateEventAdminRequest);
     }
 }
