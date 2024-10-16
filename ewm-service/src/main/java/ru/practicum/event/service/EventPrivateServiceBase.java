@@ -1,7 +1,6 @@
 package ru.practicum.event.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -80,7 +79,7 @@ public class EventPrivateServiceBase implements EventPrivateService {
     public List<EventShortDto> getAllUserEvents(Long userId, Integer from, Integer size) {
         findUserByIdOrThrowNotFoundException(userId);
         Pageable pageable = PageRequest.of(from, size);
-        Page<Event> eventPage = eventRepository.findAllByInitiatorId(userId, pageable);
+        List<Event> eventPage = eventRepository.findAllByInitiatorId(userId, pageable);
         return eventPage.stream()
                 .map(eventMapper::eventToeventShortDto)
                 .toList();
