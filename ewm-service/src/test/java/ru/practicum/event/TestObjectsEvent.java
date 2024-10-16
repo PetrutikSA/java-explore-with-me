@@ -10,6 +10,8 @@ import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.dto.event.enums.StateActionAdmin;
 import ru.practicum.dto.event.enums.StateActionUser;
 import ru.practicum.dto.location.LocationDto;
+import ru.practicum.model.Event;
+import ru.practicum.model.Location;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -21,8 +23,10 @@ public class TestObjectsEvent {
     public EventFullDto eventFullDto;
     public EventShortDto eventShortDto;
     public LocationDto locationDto;
+    public Location location;
     public UpdateEventUserRequest updateEventUserRequest;
     public UpdateEventAdminRequest updateEventAdminRequest;
+    public Event event;
 
     public TestObjectsEvent(TestObjectsCategory testObjectsCategory) {
         CategoryDto categoryDto = testObjectsCategory.categoryDto;
@@ -30,6 +34,11 @@ public class TestObjectsEvent {
         locationDto = new LocationDto();
         locationDto.setLat(30);
         locationDto.setLat(60);
+
+        location = new Location();
+        location.setId(1L);
+        location.setLat(locationDto.getLat());
+        location.setLon(locationDto.getLon());
 
         newEventDto = new NewEventDto();
         newEventDto.setTitle("Title");
@@ -84,5 +93,18 @@ public class TestObjectsEvent {
         updateEventAdminRequest.setParticipantLimit(newEventDto.getParticipantLimit());
         updateEventAdminRequest.setRequestModeration(newEventDto.isRequestModeration());
         updateEventAdminRequest.setStateAction(StateActionAdmin.PUBLISH_EVENT.toString());
+
+        event = new Event();
+        event.setId(1L);
+        event.setTitle(newEventDto.getTitle());
+        event.setEventDate(eventDate);
+        event.setAnnotation(newEventDto.getAnnotation());
+        event.setPaid(newEventDto.isPaid());
+        event.setDescription(newEventDto.getDescription());
+        event.setLocation(location);
+        event.setCategory(testObjectsCategory.category);
+        event.setParticipantLimit(newEventDto.getParticipantLimit());
+        event.setRequestModeration(newEventDto.isRequestModeration());
+        event.setId(1L);
     }
 }
