@@ -33,6 +33,7 @@ public class CommentAdminServiceBaseTest {
     private final CommentAdminService commentAdminService;
 
     private Comment comment;
+
     @BeforeEach
     void setUp() {
         TestObjectsUser testObjectsUser = new TestObjectsUser();
@@ -59,7 +60,8 @@ public class CommentAdminServiceBaseTest {
                 .thenReturn(Optional.empty());
 
         Assertions.assertThrows(NotFoundException.class, () -> {
-            commentAdminService.deleteComment(1L);;
+            commentAdminService.deleteComment(1L);
+            ;
         });
     }
 }

@@ -27,10 +27,13 @@ public class TestObjectsEvent {
     public UpdateEventUserRequest updateEventUserRequest;
     public UpdateEventAdminRequest updateEventAdminRequest;
     public Event event;
+    public Event secondEvent;
+    public Instant createdOn;
 
     public TestObjectsEvent(TestObjectsCategory testObjectsCategory) {
         CategoryDto categoryDto = testObjectsCategory.categoryDto;
         Instant eventDate = Instant.now().plus(Duration.ofDays(2));
+        Instant createdOn = Instant.now();
         locationDto = new LocationDto();
         locationDto.setLat(30);
         locationDto.setLat(60);
@@ -105,6 +108,19 @@ public class TestObjectsEvent {
         event.setCategory(testObjectsCategory.category);
         event.setParticipantLimit(newEventDto.getParticipantLimit());
         event.setRequestModeration(newEventDto.isRequestModeration());
-        event.setId(1L);
+        event.setCreatedOn(createdOn);
+
+        secondEvent = new Event();
+        secondEvent.setId(2L);
+        secondEvent.setTitle("Second" + newEventDto.getTitle());
+        secondEvent.setEventDate(eventDate.plus(Duration.ofDays(2)));
+        secondEvent.setAnnotation("Second" + newEventDto.getAnnotation());
+        secondEvent.setPaid(newEventDto.isPaid());
+        secondEvent.setDescription("Second" + newEventDto.getDescription());
+        secondEvent.setLocation(location);
+        secondEvent.setCategory(testObjectsCategory.category);
+        secondEvent.setParticipantLimit(newEventDto.getParticipantLimit());
+        secondEvent.setRequestModeration(newEventDto.isRequestModeration());
+        secondEvent.setCreatedOn(createdOn);
     }
 }

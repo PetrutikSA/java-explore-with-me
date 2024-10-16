@@ -18,7 +18,7 @@ public class TestObjectsComment {
     public CommentDto updatedCommentDto;
     public NewCommentDto newCommentDto;
     public NewCommentDto updateCommentDto;
-
+    public Comment commentToSecondEvent;
 
     public TestObjectsComment(TestObjectsUser testObjectsUser, TestObjectsEvent testObjectsEvent) {
         newCommentDto = new NewCommentDto();
@@ -54,5 +54,12 @@ public class TestObjectsComment {
         updatedCommentDto.setEventId(updatedComment.getEvent().getId());
         updatedCommentDto.setUserId(updatedComment.getUser().getId());
         updatedCommentDto.setCreated(DATE_TIME_FORMATTER.format(updatedComment.getCreated()));
+
+        commentToSecondEvent = new Comment();
+        commentToSecondEvent.setId(comment.getId());
+        commentToSecondEvent.setText("Another event comment");
+        commentToSecondEvent.setEvent(testObjectsEvent.secondEvent);
+        commentToSecondEvent.setUser(comment.getUser());
+        commentToSecondEvent.setCreated(comment.getCreated());
     }
 }
