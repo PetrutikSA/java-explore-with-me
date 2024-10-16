@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.dto.category.CategoryMapper;
+import ru.practicum.util.mapper.CategoryMapper;
 import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.model.Category;
 import ru.practicum.util.exception.NotFoundException;

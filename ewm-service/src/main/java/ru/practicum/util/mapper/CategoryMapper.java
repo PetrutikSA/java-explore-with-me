@@ -1,4 +1,4 @@
-package ru.practicum.dto.location;
+package ru.practicum.util.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -6,16 +6,17 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import ru.practicum.model.Location;
+import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.category.NewCategoryDto;
+import ru.practicum.model.Category;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface LocationMapper {
+public interface CategoryMapper {
     @Mapping(target = "id", ignore = true)
-    Location locationDtoToLocation(LocationDto locationDto);
+    Category newCategoryToCategory(NewCategoryDto newCategoryDto);
 
-    LocationDto locationToLocationDto(Location location);
+    CategoryDto categoryToCategoryDto(Category category);
 
-    @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateLocationWithLocationDto(LocationDto locationDto, @MappingTarget Location location);
+    void updateCategoryFromNewCategory(NewCategoryDto newCategoryDto, @MappingTarget Category category);
 }

@@ -1,4 +1,4 @@
-package ru.practicum.dto.event;
+package ru.practicum.util.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -7,9 +7,11 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import ru.practicum.dto.category.CategoryMapper;
-import ru.practicum.dto.location.LocationMapper;
-import ru.practicum.dto.user.UserMapper;
+import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.EventShortDto;
+import ru.practicum.dto.event.NewEventDto;
+import ru.practicum.dto.event.UpdateEventAdminRequest;
+import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.model.Event;
 
 import java.time.Instant;
@@ -65,5 +67,5 @@ public interface EventMapper {
     @Mapping(target = "eventDate", source = "eventDate", qualifiedByName = "stringToInstant")
     @Mapping(target = "state", ignore = true)
     void updateEventAdminRequestIgnoringLocationAndCategoryId(UpdateEventAdminRequest updateEventAdminRequest,
-                                                             @MappingTarget Event event);
+                                                              @MappingTarget Event event);
 }

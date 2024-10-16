@@ -3,7 +3,7 @@ package ru.practicum.request.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.event.request.ParticipationRequestDto;
-import ru.practicum.dto.event.request.ParticipationRequestMapper;
+import ru.practicum.util.mapper.ParticipationRequestMapper;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.model.Event;
 import ru.practicum.model.ParticipationRequest;

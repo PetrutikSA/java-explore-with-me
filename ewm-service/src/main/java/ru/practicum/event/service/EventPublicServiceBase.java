@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.dto.event.EventMapper;
+import ru.practicum.util.mapper.EventMapper;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.event.enums.EventsSort;
 import ru.practicum.event.repository.EventRepository;

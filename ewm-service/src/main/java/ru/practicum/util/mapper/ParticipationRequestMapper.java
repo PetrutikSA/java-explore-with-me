@@ -1,10 +1,9 @@
-package ru.practicum.dto.event.request;
+package ru.practicum.util.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-import ru.practicum.dto.event.EventMapper;
-import ru.practicum.dto.user.UserMapper;
+import ru.practicum.dto.event.request.ParticipationRequestDto;
 import ru.practicum.model.ParticipationRequest;
 
 

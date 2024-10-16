@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.dto.compilation.CompilationDto;
-import ru.practicum.dto.compilation.CompilationMapper;
+import ru.practicum.util.mapper.CompilationMapper;
 import ru.practicum.model.Compilation;
 import ru.practicum.util.exception.NotFoundException;
 
