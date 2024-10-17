@@ -18,6 +18,7 @@ public class TestObjectsComment {
     public CommentDto updatedCommentDto;
     public NewCommentDto newCommentDto;
     public NewCommentDto updateCommentDto;
+    public NewCommentDto newCommentToSecondEvent;
     public Comment commentToSecondEvent;
 
     public TestObjectsComment(TestObjectsUser testObjectsUser, TestObjectsEvent testObjectsEvent) {
@@ -61,5 +62,8 @@ public class TestObjectsComment {
         commentToSecondEvent.setEvent(testObjectsEvent.secondEvent);
         commentToSecondEvent.setUser(comment.getUser());
         commentToSecondEvent.setCreated(comment.getCreated());
+
+        newCommentToSecondEvent = new NewCommentDto();
+        newCommentToSecondEvent.setText(commentToSecondEvent.getText());
     }
 }

@@ -28,7 +28,7 @@ public class TestObjectsEvent {
     public UpdateEventAdminRequest updateEventAdminRequest;
     public Event event;
     public Event secondEvent;
-    public Instant createdOn;
+    public NewEventDto secondNewEventDto;
 
     public TestObjectsEvent(TestObjectsCategory testObjectsCategory) {
         CategoryDto categoryDto = testObjectsCategory.categoryDto;
@@ -122,5 +122,16 @@ public class TestObjectsEvent {
         secondEvent.setParticipantLimit(newEventDto.getParticipantLimit());
         secondEvent.setRequestModeration(newEventDto.isRequestModeration());
         secondEvent.setCreatedOn(createdOn);
+
+        secondNewEventDto = new NewEventDto();
+        secondNewEventDto.setTitle(secondEvent.getTitle());
+        secondNewEventDto.setEventDate(DATE_TIME_FORMATTER.format(secondEvent.getEventDate()));
+        secondNewEventDto.setAnnotation(secondEvent.getAnnotation());
+        secondNewEventDto.setPaid(secondEvent.isPaid());
+        secondNewEventDto.setDescription(secondEvent.getDescription());
+        secondNewEventDto.setLocation(locationDto);
+        secondNewEventDto.setCategory(1);
+        secondNewEventDto.setParticipantLimit(secondEvent.getParticipantLimit());
+        secondNewEventDto.setRequestModeration(secondEvent.isRequestModeration());
     }
 }
