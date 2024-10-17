@@ -1563,23 +1563,19 @@
 		},
 		{
 			"key": "uid",
-			"value": "1",
-			"type": "string"
+			"value": ""
 		},
 		{
 			"key": "eid",
-			"value": "1",
-			"type": "string"
+			"value": ""
 		},
 		{
 			"key": "request_body",
-			"value": "",
-			"type": "string"
+			"value": ""
 		},
 		{
 			"key": "response",
-			"value": "",
-			"type": "string"
+			"value": ""
 		},
 		{
 			"key": "cid",
@@ -1587,8 +1583,7 @@
 		},
 		{
 			"key": "source",
-			"value": "",
-			"type": "string"
+			"value": ""
 		}
 	]
 }
