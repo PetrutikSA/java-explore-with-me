@@ -93,7 +93,7 @@ public class CommentIntegrationTest {
         CommentDto createdCommentDto = createComment(newCommentDto, createdUser.getId(), createdEventDto.getId());
 
         assertThat(createdCommentDto)
-                .usingRecursiveComparison().ignoringFields("id").isEqualTo(commentDto);
+                .usingRecursiveComparison().ignoringFields("id", "created").isEqualTo(commentDto);
     }
 
     @Test
@@ -104,10 +104,10 @@ public class CommentIntegrationTest {
 
         CommentDto createdCommentDto = createComment(newCommentDto, createdUser.getId(), createdEventDto.getId());
 
-        HttpEntity<Void> CommentRequest = new HttpEntity<>(headers);
+        HttpEntity<Void> commentDeleteRequest = new HttpEntity<>(headers);
         ResponseEntity<Void> deleteCommentResponse = testRestTemplate.exchange(
                 baseUrl + deleteCommentApi(createdUser.getId(), createdEventDto.getId(), createdCommentDto.getId()),
-                HttpMethod.DELETE, null, Void.class
+                HttpMethod.DELETE, commentDeleteRequest, Void.class
         );
 
         Assertions.assertNotNull(deleteCommentResponse);
@@ -131,7 +131,8 @@ public class CommentIntegrationTest {
         HttpEntity<Void> getCommentToFirstEventRequest = new HttpEntity<>(headers);
         ResponseEntity<List<CommentDto>> getCommentByEventResponse = testRestTemplate.exchange(
                 baseUrl + getCommentsByEventCommentApi(createdFirstEventDto.getId()), HttpMethod.GET,
-                null, new ParameterizedTypeReference<>(){}
+                null, new ParameterizedTypeReference<>() {
+                }
         );
 
         Assertions.assertNotNull(getCommentByEventResponse);
@@ -149,15 +150,15 @@ public class CommentIntegrationTest {
         return String.format("/users/%d/events", userId);
     }
 
-    private String createCommentApi(long userId, long eventId){
+    private String createCommentApi(long userId, long eventId) {
         return String.format("/users/%d/events/%d/comments", userId, eventId);
     }
 
-    private String deleteCommentApi(long userId, long eventId, long commentId){
+    private String deleteCommentApi(long userId, long eventId, long commentId) {
         return String.format("/users/%d/events/%d/comments/%d", userId, eventId, commentId);
     }
 
-    private String getCommentsByEventCommentApi(long eventId){
+    private String getCommentsByEventCommentApi(long eventId) {
         return String.format("/events/%d/comments", eventId);
     }
 
