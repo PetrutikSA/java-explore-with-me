@@ -13,6 +13,7 @@ import ru.practicum.model.ViewStats;
 import ru.practicum.repository.AppsRepository;
 import ru.practicum.repository.EndpointsRepository;
 import ru.practicum.repository.UrisRepository;
+import ru.practicum.util.exception.BadRequestException;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -63,6 +64,9 @@ public class StatsServiceBase implements StatsService {
                 Instant::from);
         Instant end = DATE_TIME_FORMATTER.parse(java.net.URLDecoder.decode(endString, StandardCharsets.UTF_8),
                 Instant::from);
+        if (end.isBefore(start)) {
+            throw new BadRequestException("Start should be before end");
+        }
         List<ViewStats> viewStatsList;
         if (uris == null || uris.isEmpty()) {
             if (unique) {

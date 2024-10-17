@@ -15,10 +15,10 @@ import static ru.practicum.ewm.stats.util.Constants.DATE_TIME_FORMATTER;
 public class StatsClient {
 
     private final RestClient restClient;
-    private static final String BASE_URL = "http://localhost:9090";
+    private static final String BASE_URL = "http://stats-server:9090";
 
-    public StatsClient(RestClient.Builder builder) {
-        this.restClient = builder
+    public StatsClient() {
+        this.restClient = RestClient.builder()
                 .baseUrl(BASE_URL)
                 .build();
     }
@@ -35,14 +35,14 @@ public class StatsClient {
     public List<ViewStatsDto> getStats(Instant start, Instant end, List<String> uris, Boolean unique) {
         String startStringToUrl = java.net.URLEncoder.encode(DATE_TIME_FORMATTER.format(start), StandardCharsets.UTF_8);
         String endStringToUrl = java.net.URLEncoder.encode(DATE_TIME_FORMATTER.format(end), StandardCharsets.UTF_8);
-        StringBuilder uriBuilder = new StringBuilder("/stats");
+        StringBuilder uriBuilder = new StringBuilder("/stats?");
         uriBuilder.append("start=").append(startStringToUrl);
-        uriBuilder.append("end=").append(endStringToUrl);
+        uriBuilder.append("&end=").append(endStringToUrl);
         if (uris != null && !uris.isEmpty()) {
-            uriBuilder.append("uris=").append(String.join(",", uris));
+            uriBuilder.append("&uris=").append(String.join(",", uris));
         }
         if (unique != null) {
-            uriBuilder.append("unique=").append(unique);
+            uriBuilder.append("&unique=").append(unique);
         }
 
         return restClient.get()
