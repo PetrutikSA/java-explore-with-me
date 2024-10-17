@@ -1,6 +1,5 @@
 package ru.practicum.comment.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -15,13 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.StatsClient;
 import ru.practicum.comment.service.CommentPrivateService;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
-import ru.practicum.ewm.stats.dto.EndpointHitDto;
-
-import static ru.practicum.config.EWMServiceAppConfig.APP_NAME;
 
 @RestController
 @RequestMapping("/users/{userId}/events/{eventId}/comments")
@@ -29,15 +24,12 @@ import static ru.practicum.config.EWMServiceAppConfig.APP_NAME;
 @Validated
 public class CommentPrivateController {
     private final CommentPrivateService commentPrivateService;
-    private final StatsClient statsClient;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto createComment(@PathVariable @Positive @NotNull Long userId,
                                     @PathVariable @Positive @NotNull Long eventId,
-                                    @RequestBody @Valid NewCommentDto newCommentDto,
-                                    HttpServletRequest request) {
-        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
+                                    @RequestBody @Valid NewCommentDto newCommentDto) {
         return commentPrivateService.createComment(userId, eventId, newCommentDto);
     }
 
@@ -46,9 +38,7 @@ public class CommentPrivateController {
     public CommentDto updateComment(@PathVariable @Positive @NotNull Long userId,
                                     @PathVariable @Positive @NotNull Long eventId,
                                     @PathVariable @Positive @NotNull Long commentId,
-                                    @RequestBody @Valid NewCommentDto newCommentDto,
-                                    HttpServletRequest request) {
-        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
+                                    @RequestBody @Valid NewCommentDto newCommentDto) {
         return commentPrivateService.updateComment(userId, eventId, commentId, newCommentDto);
     }
 
@@ -56,9 +46,7 @@ public class CommentPrivateController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable @Positive @NotNull Long userId,
                               @PathVariable @Positive @NotNull Long eventId,
-                              @PathVariable @Positive @NotNull Long commentId,
-                              HttpServletRequest request) {
-        statsClient.createRecord(new EndpointHitDto(APP_NAME, request.getRequestURI(), request.getRemoteAddr()));
+                              @PathVariable @Positive @NotNull Long commentId) {
         commentPrivateService.deleteComment(userId, eventId, commentId);
     }
 }
