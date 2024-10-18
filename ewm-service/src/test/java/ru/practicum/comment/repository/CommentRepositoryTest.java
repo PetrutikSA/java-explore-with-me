@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.category.TestObjectsCategory;
@@ -22,6 +21,8 @@ import ru.practicum.model.Location;
 import ru.practicum.model.User;
 import ru.practicum.user.TestObjectsUser;
 import ru.practicum.user.repository.UserRepository;
+
+import java.util.List;
 
 @DataJpaTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -121,9 +122,9 @@ public class CommentRepositoryTest {
         commentRepository.save(commentToSecondEvent);
 
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Comment> commentPage = commentRepository.findAllByEventId(event.getId(), pageable);
+        List<Comment> commentPage = commentRepository.findAllByEventId(event.getId(), pageable);
 
         Assertions.assertNotNull(commentPage);
-        Assertions.assertEquals(2, commentPage.getContent().size());
+        Assertions.assertEquals(2, commentPage.size());
     }
 }

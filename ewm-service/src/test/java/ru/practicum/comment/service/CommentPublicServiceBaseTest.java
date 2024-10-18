@@ -8,18 +8,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageImpl;
 import ru.practicum.category.TestObjectsCategory;
 import ru.practicum.comment.TestObjectsComment;
 import ru.practicum.comment.repository.CommentRepository;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.CommentMapperImpl;
-import ru.practicum.dto.comment.NewCommentDto;
 import ru.practicum.event.TestObjectsEvent;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.model.Comment;
 import ru.practicum.model.Event;
-import ru.practicum.model.User;
 import ru.practicum.user.TestObjectsUser;
 import ru.practicum.user.repository.UserRepository;
 import ru.practicum.util.exception.ConflictException;
@@ -41,12 +38,9 @@ public class CommentPublicServiceBaseTest {
 
     private Comment comment;
     private CommentDto commentDto;
-    private NewCommentDto newCommentDto;
-    private NewCommentDto updateCommentDto;
     public Comment updatedComment;
     public CommentDto updatedCommentDto;
 
-    private User user;
     private Event event;
 
     @BeforeEach
@@ -58,12 +52,9 @@ public class CommentPublicServiceBaseTest {
 
         comment = testObjectsComment.comment;
         commentDto = testObjectsComment.commentDto;
-        newCommentDto = testObjectsComment.newCommentDto;
-        updateCommentDto = testObjectsComment.updateCommentDto;
         updatedComment = testObjectsComment.updatedComment;
         updatedCommentDto = testObjectsComment.updatedCommentDto;
 
-        user = testObjectsUser.user;
         event = testObjectsEvent.event;
     }
 
@@ -101,7 +92,7 @@ public class CommentPublicServiceBaseTest {
         Mockito.when(eventRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.ofNullable(event));
         Mockito.when(commentRepository.findAllByEventId(Mockito.anyLong(), Mockito.any()))
-                .thenReturn(new PageImpl<>(List.of(comment)));
+                .thenReturn(List.of(comment));
 
         List<CommentDto> result = commentPublicService.getEventComment(1L, 0, 10);
 
@@ -114,7 +105,7 @@ public class CommentPublicServiceBaseTest {
         Mockito.when(eventRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.empty());
         Mockito.when(commentRepository.findAllByEventId(Mockito.anyLong(), Mockito.any()))
-                .thenReturn(new PageImpl<>(List.of(comment)));
+                .thenReturn(List.of(comment));
 
         Assertions.assertThrows(NotFoundException.class, () -> {
             commentPublicService.getEventComment(1L, 0, 10);
