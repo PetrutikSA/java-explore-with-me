@@ -43,7 +43,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CommentIntegrationTest {
     private final TestRestTemplate testRestTemplate;
-    HttpHeaders headers;
+    private HttpHeaders headers;
 
     @MockBean
     private final StatsClient statsClient;
